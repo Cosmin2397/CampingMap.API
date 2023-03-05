@@ -10,6 +10,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
