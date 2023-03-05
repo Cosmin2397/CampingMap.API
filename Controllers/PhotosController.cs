@@ -51,9 +51,11 @@ namespace CampingMap.API.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPhoto(Guid id, Photo photo)
+        public async Task<ActionResult<Photo>> PutPhoto(Guid id, Photo photo)
         {
-            throw new NotImplementedException();
+            var updatedPhoto = await _photoRepository.UpdatePhoto(id, photo);
+
+            return Ok(updatedPhoto);
         }
 
         [HttpPost]

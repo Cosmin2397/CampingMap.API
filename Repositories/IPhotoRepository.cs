@@ -12,7 +12,7 @@ namespace CampingMap.API.Repositories
 
         Task<Photo> AddPhoto(Photo photo);
 
-        Task UpdatePhoto(Photo photo);
+        Task<Photo> UpdatePhoto(Guid id, Photo photo);
 
         Task<Photo> DeletePhoto(Guid id);
     }

@@ -1,5 +1,6 @@
 ﻿using CampingMap.API.Data;
 using CampingMap.API.Models;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 
 namespace CampingMap.API.Repositories
@@ -64,9 +65,32 @@ namespace CampingMap.API.Repositories
             return photos;
         }
 
-        public Task UpdatePhoto(Photo photo)
+        public async Task<Photo> UpdatePhoto(Guid id, Photo photo)
         {
-            throw new NotImplementedException();
+            _context.Entry(photo).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PhotoExists(id))
+                {
+                    return await AddPhoto(photo);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return photo;
+        }
+
+        private bool PhotoExists(Guid id)
+        {
+            return _context.Photos.Any(e => e.Id == id);
         }
     }
 }
