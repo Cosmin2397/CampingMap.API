@@ -26,7 +26,13 @@ namespace CampingMap.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Photo>>> GetPhotos()
         {
-            throw new NotImplementedException();
+            var photos = await _photoRepository.GetPhotos();
+            if (photos == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(photos);
         }
 
         // GET: api/Photos/5

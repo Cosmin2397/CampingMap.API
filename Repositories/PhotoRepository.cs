@@ -58,6 +58,12 @@ namespace CampingMap.API.Repositories
             return photo;
         }
 
+        public async Task<IEnumerable<Photo>> GetPhotos()
+        {
+            var photos = await _context.Photos.ToListAsync();
+            return photos;
+        }
+
         public Task UpdatePhoto(Photo photo)
         {
             throw new NotImplementedException();
