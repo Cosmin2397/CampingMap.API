@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CampingMap.API.Data;
 using CampingMap.API.Models;
+using CampingMap.API.Repositories;
 
 namespace CampingMap.API.Controllers
 {
@@ -14,25 +15,26 @@ namespace CampingMap.API.Controllers
     [ApiController]
     public class LocationsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly ILocationRepository _locationRepository;
 
-        public LocationsController(AppDbContext context)
+        public LocationsController(ILocationRepository locationRepository)
         {
-            _context = context;
+            _locationRepository = locationRepository;
         }
 
         // GET: api/Locations
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Location>>> GetLocations()
         {
-            return await _context.Locations.ToListAsync();
+            var locations = await _locationRepository.GetLocations();
+            return Ok(locations);
         }
 
         // GET: api/Locations/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Location>> GetLocation(Guid id)
         {
-            var location = await _context.Locations.FindAsync(id);
+            var location = await _locationRepository.GetLocationById(id);
 
             if (location == null)
             {
@@ -42,35 +44,66 @@ namespace CampingMap.API.Controllers
             return location;
         }
 
+        [HttpGet("camping/{id}")]
+        public async Task<ActionResult<Location>> GetCampingLocation(Guid id)
+        {
+            var location = await _locationRepository.GetLocationByCampingId(id);
+
+            if (location == null)
+            {
+                return NotFound();
+            }
+
+            return location;
+        }
+
+        [HttpGet("city/{id}")]
+        public async Task<ActionResult<IEnumerable<Location>>> GetCityCampigns(string id)
+        {
+            var locations = await _locationRepository.GetCityCampings(id);
+
+            if (locations == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(locations);
+        }
+
+        [HttpGet("county/{id}")]
+        public async Task<ActionResult<IEnumerable<Location>>> GetCountyCampigns(string id)
+        {
+            var locations = await _locationRepository.GetCountyCampings(id);
+
+            if (locations == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(locations);
+        }
+
+        [HttpGet("region/{id}")]
+        public async Task<ActionResult<IEnumerable<Location>>> GetRegionCampigns(string id)
+        {
+            var locations = await _locationRepository.GetRegionCampings(id);
+
+            if (locations == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(locations);
+        }
+
         // PUT: api/Locations/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutLocation(Guid id, Location location)
         {
-            if (id != location.Id)
-            {
-                return BadRequest();
-            }
+            var updatedLocation = await _locationRepository.UpdateLocation(id, location);
 
-            _context.Entry(location).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!LocationExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(updatedLocation);
         }
 
         // POST: api/Locations
@@ -78,31 +111,44 @@ namespace CampingMap.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Location>> PostLocation(Location location)
         {
-            _context.Locations.Add(location);
-            await _context.SaveChangesAsync();
+            try
+            {
 
-            return CreatedAtAction("GetLocation", new { id = location.Id }, location);
+                await _locationRepository.AddLocation(location);
+                if (location == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(location);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         // DELETE: api/Locations/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLocation(Guid id)
         {
-            var location = await _context.Locations.FindAsync(id);
-            if (location == null)
+            try
             {
-                return NotFound();
+
+                var location = await _locationRepository.DeleteLocation(id);
+                if (location == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok();
+
             }
-
-            _context.Locations.Remove(location);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool LocationExists(Guid id)
-        {
-            return _context.Locations.Any(e => e.Id == id);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
     }
 }
