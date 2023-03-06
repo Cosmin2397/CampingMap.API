@@ -42,9 +42,17 @@ namespace CampingMap.API.Repositories
             return photo;
         }
 
-        public Task<IEnumerable<Photo>> GetCampingPhotos(Guid id)
+        public async Task<IEnumerable<Photo>> GetCampingPhotos(Guid id)
         {
-            throw new NotImplementedException();
+            var photos = await _context.Photos.ToListAsync();
+            var campingPhotos= photos.Where(photo => photo.CampingId == id);
+
+            if (campingPhotos == null)
+            {
+                return new List<Photo>();
+            }
+
+            return campingPhotos;
         }
 
         public async Task<Photo> GetPhotoById(Guid id)

@@ -36,6 +36,14 @@ namespace CampingMap.API.Controllers
         }
 
         // GET: api/Photos/5
+        [HttpGet("camping/{id}")]
+        public async Task<ActionResult<IEnumerable<Photo>>> GetCampingPhotos(Guid id)
+        {
+            var photos = await _photoRepository.GetCampingPhotos(id);
+            return Ok(photos);
+        }
+
+        // GET: api/Photos/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Photo>> GetPhoto(Guid id)
         {
