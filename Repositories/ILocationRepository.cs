@@ -8,11 +8,13 @@ namespace CampingMap.API.Repositories
 
         Task<IEnumerable<Location>> GetRegionCampings(string region);
 
-        Task<IEnumerable<Location>> GetCountyampings(string county);
+        Task<IEnumerable<Location>> GetCountyCampings(string county);
 
         Task<IEnumerable<Location>> GetCityCampings(string city);
 
         Task<Location> GetLocationById(Guid id);
+
+        Task<Location> GetLocationByCampingId(Guid id);
 
         Task<Location> AddLocation(Location location);
 
