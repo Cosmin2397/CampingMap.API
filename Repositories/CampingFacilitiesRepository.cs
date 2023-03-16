@@ -23,7 +23,7 @@ namespace CampingMap.API.Repositories
             else
             {
                 campingFacility.Id = Guid.NewGuid();
-                campingFacility.
+                campingFacility.Facility = await GetFacilityById(campingFacility.FacilityId);
                 await _context.CampingFacilities.AddAsync(campingFacility);
                 await _context.SaveChangesAsync();
                 return campingFacility;
@@ -81,6 +81,8 @@ namespace CampingMap.API.Repositories
 
         public async Task<CampingFacilities> UpdateCampingFacility(Guid id, CampingFacilities campingFacility)
         {
+            Facility facility = await _context.Facilities.FirstOrDefaultAsync(a => a.Id == campingFacility.FacilityId);
+            campingFacility.Facility = await GetFacilityById(campingFacility.FacilityId);
             _context.Entry(campingFacility).State = EntityState.Modified;
 
             try
@@ -101,6 +103,19 @@ namespace CampingMap.API.Repositories
         private bool CampingFacilityExists(Guid id)
         {
             return _context.CampingFacilities.Any(e => e.Id == id);
+        }
+
+        private async Task<string> GetFacilityById(Guid id)
+        {
+            Facility facility = await _context.Facilities.FirstOrDefaultAsync(a => a.Id == id);
+            if (facility != null)
+            {
+                return facility.Name;
+            }
+            else
+            {
+                return String.Empty;
+            }
         }
     }
 }
