@@ -23,6 +23,7 @@ namespace CampingMap.API.Repositories
             else
             {
                 campingFacility.Id = Guid.NewGuid();
+                campingFacility.
                 await _context.CampingFacilities.AddAsync(campingFacility);
                 await _context.SaveChangesAsync();
                 return campingFacility;

@@ -8,6 +8,7 @@
 
         public Guid FacilityId { get; set; }
 
-        public Facility Facility { get; set; }
+        public string Facility { get; set; }
+
     }
 }

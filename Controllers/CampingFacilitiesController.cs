@@ -24,14 +24,14 @@ namespace CampingMap.API.Controllers
             return Ok(campingsFacilities);
         }
 
-        [HttpGet]
+        [HttpGet("camping/{id}")]
         public async Task<ActionResult<IEnumerable<CampingFacilities>>> GetCampingFacilities(Guid id)
         {
             var campingsFacilities = await _campingFacilitiesRepository.GetCampingFacilities(id);
             return Ok(campingsFacilities);
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<ActionResult<CampingFacilities>> GetCampingFacilityById(Guid id)
         {
             var campingFacility = await _campingFacilitiesRepository.GetCampingFacilitiesById(id);
