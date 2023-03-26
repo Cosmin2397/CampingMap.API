@@ -24,5 +24,7 @@ namespace CampingMap.API.Data
 
         public DbSet<Review> Reviews { get; set; }
 
+        public DbSet<User> Users => Set<User>();
+
     }
 }
