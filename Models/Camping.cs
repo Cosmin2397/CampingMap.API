@@ -17,17 +17,17 @@ namespace CampingMap.API.Models
 
         public double Price { get; set; }
 
-        public Rating Rating { get; set; }
+        public double Rating { get; set; }
 
-        public Review[] Reviews { get; set; }
+        public IEnumerable<Review> Reviews { get; set; }
 
-        public Photo[] Photos { get; set; }
+        public IEnumerable<Photo> Photos { get; set; }
 
         public CampingType Type { get; set; }
 
         public Location Location { get; set; }
 
-        public CampingFacilities[] Facilities { get; set; }
+        public IEnumerable<CampingFacilities> Facilities { get; set; }
 
 
     }
