@@ -49,7 +49,7 @@ namespace CampingMap.API.Repositories
 
             if (campingPhotos == null)
             {
-                return new List<Photo>();
+                return null;
             }
 
             return campingPhotos;

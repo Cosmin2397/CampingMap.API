@@ -33,8 +33,12 @@ namespace CampingMap.API.Repositories
 
         public async Task<double> GetCampingRating(Guid id)
         {
+            double score = 0;
             var reviews = await _reviewRepository.GetCampingReviews(id);
-            var score = reviews.Average(p => p.Rating);
+            if (reviews.Any())
+            {
+                score = reviews.Average(p => p.Rating);
+            }
             return score;
         }
 
