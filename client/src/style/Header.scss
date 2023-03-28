@@ -1,0 +1,23 @@
+@use 'variables';
+
+.MuiToolbar-root {
+    a {
+        color: #fff;
+        text-decoration: none;
+        &.active {
+            border-bottom: 2px solid variables.$primary-color;
+            padding-bottom: 5px;
+        }
+    }
+    .logo {
+        a {
+            background-color: transparent;
+        }
+    }
+}
+.user-menu {
+    a {
+        color: #fff;
+        text-decoration: none;
+    }
+}
