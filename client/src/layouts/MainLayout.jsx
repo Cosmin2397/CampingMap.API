@@ -6,7 +6,6 @@ export const MainLayout = ({ user }) => {
   return (
     <div className='main-layout'>
       <Header user={user} type="main"/>
-
       <main><Outlet /></main>
     </div>
   )

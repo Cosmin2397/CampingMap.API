@@ -1,8 +1,8 @@
 import React from 'react'
-import { useFetch } from '../hooks/useFetch'
+import { useGetQuery } from '../hooks/useGetQuery'
 
 export const Home = () => {
-  const {data,loading,error} = useFetch('https://localhost:7109/api/Campings')
+  const {data,loading,error} = useGetQuery('api/Campings')
   console.log({ data })
   return (
     <div>Home</div>

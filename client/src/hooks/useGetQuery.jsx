@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 
 
-export function useFetch(url){
+export function useGetQuery(endpoint_path){
 
     const [data,setData] = useState(null)
     const [error,setError] = useState(null)
@@ -13,7 +13,7 @@ export function useFetch(url){
             async function(){
                 try{
                     setLoading(true)
-                    const response = await axios.get(url)
+                    const response = await axios.get(process.env.REACT_APP_API_URL + endpoint_path)
                     setData(response.data)
                 }catch(err){
                     setError(err)
@@ -22,7 +22,7 @@ export function useFetch(url){
                 }
             }
         )()
-    }, [url])
+    }, [endpoint_path])
 
     return { data, error, loading }
 
