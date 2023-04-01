@@ -59,16 +59,16 @@ export const CustomTable = ({ columns, data, onAdd, onEdit, onDelete }) => {
         <Table>
           <TableHead>
             <TableRow>
-              {columns.map((column) => (
+              {columns?.map((column) => (
                 <TableCell key={column.field}>{column.headerName}</TableCell>
               ))}
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row) => (
+            {data?.map((row) => (
               <TableRow key={row.id}>
-                {columns.map((column) => (
+                {columns?.map((column) => (
                   <TableCell key={column.field}>{row[column.field]}</TableCell>
                 ))}
                 <TableCell>
@@ -98,7 +98,7 @@ export const CustomTable = ({ columns, data, onAdd, onEdit, onDelete }) => {
                   key={column.field}
                   label={column.headerName}
                   name={column.field}
-                  value={drawerOpen === 'edit' ? formData[column.field] : null}
+                  value={drawerOpen === 'edit' ? formData[column.field] : ''}
                   onChange={handleFormChange}
                 />
               ))}
