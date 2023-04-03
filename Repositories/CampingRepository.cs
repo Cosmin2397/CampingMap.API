@@ -126,11 +126,6 @@ namespace CampingMap.API.Repositories
 
         public async Task<Camping> UpdateCamping(Guid id, Camping camping)
         {
-            camping.Location = await _locationRepository.GetLocationByCampingId(camping.Id);
-            camping.Photos = await _photoRepository.GetCampingPhotos(camping.Id);
-            camping.Reviews = await _reviewRepository.GetCampingReviews(camping.Id);
-            camping.Rating = await _ratingRepository.GetCampingRating(camping.Id);
-            camping.Facilities = await _campingFacilitiesRepository.GetCampingFacilities(camping.Id);
             _context.Entry(camping).State = EntityState.Modified;
 
             try
