@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -9,16 +9,24 @@ import {
   Paper,
   IconButton,
   Drawer,
-  TextField,
   Button,
 } from "@mui/material";
 import { Delete as DeleteIcon, Edit as EditIcon, Add as AddIcon } from "@mui/icons-material";
 import Stack from '@mui/material/Stack';
+import { ManageCampingForm } from '../ManageCampingForm'
 
-export const CustomTable = ({ columns, data, onAdd, onEdit, onDelete }) => {
-  const [selectedRow, setSelectedRow] = React.useState(null);
-  const [drawerOpen, setDrawerOpen] = React.useState(null);
-  const [formData, setFormData] = React.useState(null);
+export const CustomTable = ({ 
+  columns, 
+  data, 
+  onAdd, 
+  onEdit, 
+  onDelete, 
+  formData, 
+  setFormData, 
+  selectedRow, 
+  setSelectedRow 
+}) => {
+  const [drawerOpen, setDrawerOpen] = useState(null);
 
   const handleAdd = () => {
     setDrawerOpen('add');
@@ -59,7 +67,7 @@ export const CustomTable = ({ columns, data, onAdd, onEdit, onDelete }) => {
         <Table>
           <TableHead>
             <TableRow>
-              {columns?.map((column) => (
+              {columns?.slice(0, 5)?.map((column) => (
                 <TableCell key={column.field}>{column.headerName}</TableCell>
               ))}
               <TableCell></TableCell>
@@ -68,7 +76,7 @@ export const CustomTable = ({ columns, data, onAdd, onEdit, onDelete }) => {
           <TableBody>
             {data?.map((row) => (
               <TableRow key={row.id}>
-                {columns?.map((column) => (
+                {columns?.slice(0, 5)?.map((column) => (
                   <TableCell key={column.field}>{row[column.field]}</TableCell>
                 ))}
                 <TableCell>
@@ -85,26 +93,22 @@ export const CustomTable = ({ columns, data, onAdd, onEdit, onDelete }) => {
         </Table>
       </TableContainer>
       <Drawer 
-        anchor="right" 
+        anchor="bottom" 
         open={!!drawerOpen} 
         onClose={handleDrawerClose}
-        sx={{ minWidth: '350px' }}
       >
-        <form onSubmit={handleFormSubmit}>
+        <form>
           {formData && (
             <Stack direction="column" spacing={2} sx={{ padding: '35px' }}>
-              {columns.map((column) => (
-                <TextField
-                  key={column.field}
-                  label={column.headerName}
-                  name={column.field}
-                  value={drawerOpen === 'edit' ? formData[column.field] : ''}
-                  onChange={handleFormChange}
-                />
-              ))}
+              <ManageCampingForm 
+                columns={columns} 
+                drawerOpen={drawerOpen}
+                formData={formData}
+                handleFormChange={handleFormChange}
+              />
               <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{ paddingTop: '20px' }}>
                 <Button color="primary" variant="outlined" onClick={handleDrawerClose}>Cancel</Button>
-                <Button type="submit" color="primary" variant="contained">Save</Button>
+                <Button color="primary" variant="contained" onClick={handleFormSubmit}>Save</Button>
               </Stack>
             </Stack>
           )}
