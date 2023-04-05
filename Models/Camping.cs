@@ -27,7 +27,7 @@ namespace CampingMap.API.Models
 
         public Location? Location { get; set; }
 
-        public IEnumerable<CampingFacilities>? Facilities { get; set; }
+        public string? Facilities { get; set; }
 
 
     }
