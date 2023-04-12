@@ -1,29 +1,39 @@
 import React, { useState, useMemo, useEffect } from 'react'
-import Map, { Marker, Popup, FullscreenControl, GeolocateControl, NavigationControl, ScaleControl } from 'react-map-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import { DATA } from "../data";
-import MapPin from "./MapPin";
-import { MapSearch } from './MapSearch';
+import Map, { Marker, Popup, FullscreenControl, GeolocateControl, NavigationControl, ScaleControl } from 'react-map-gl'
+import MapPin from "./MapPin"
+import { MapSearch } from './MapSearch'
+import { useGetQuery } from '../hooks/useGetQuery'
+import { Message } from './common/Message'
+import { Loader } from './common/Loader'
+
+
+import 'mapbox-gl/dist/mapbox-gl.css'
 
 
 export const CampsMap = () => {
-    const [selectedPark, setSelectedPark] = useState(null);
+    const [selectedCamping, setSelectedCamping] = useState(null);
     const [viewport, setViewport] = useState({
         latitude: 45.4211,
         longitude: -75.6903,
         zoom: 10
     });
 
+    const {getRequest, data, loading, error} = useGetQuery('api/Campings')
+
+    useEffect(() => {
+      getRequest()
+    }, [])
+
     const MapPins = useMemo(
       () =>
-       DATA.features.map(park => (
+      data?.map(camping => (
         <Marker
-          key={park.properties.PARK_ID}
-          latitude={park.geometry.coordinates[1]}
-          longitude={park.geometry.coordinates[0]}
+          key={camping.id}
+          latitude={camping.location.latitude}
+          longitude={camping.location.longitude}
           onClick={e => {
             e.originalEvent.stopPropagation();
-            setSelectedPark(park);
+            setSelectedCamping(camping);
           }}
         >
           <MapPin />
@@ -33,32 +43,40 @@ export const CampsMap = () => {
     );
 
     useEffect(() => {
-        const listener = e => {
-          if (e.key === "Escape") {
-            setSelectedPark(null);
-          }
-        };
-        window.addEventListener("keydown", listener);
-    
-        return () => {
-          window.removeEventListener("keydown", listener);
-        };
+      const listener = e => {
+        if (e.key === "Escape") {
+          setSelectedCamping(null);
+        }
+      };
+      window.addEventListener("keydown", listener);
+  
+      return () => {
+        window.removeEventListener("keydown", listener);
+      };
       }, []);
     
-      const handleMapClick = (e) => {
-        const features = e.features || [];
-        console.log({features})
-    
-        // if (features.length > 0) {
-        //   setPopupInfo({
-        //     lngLat: features[0].geometry.coordinates,
-        //     text: features[0].properties.title,
-        //   });
-        // }
-      };
+    const handleMapClick = (e) => {
+      const features = e.features || [];
+      console.log({features})
+  
+      // if (features.length > 0) {
+      //   setPopupInfo({
+      //     lngLat: features[0].geometry.coordinates,
+      //     text: features[0].properties.title,
+      //   });
+      // }
+    };
+
 
   return (
     <div>
+      <Message 
+        showMessage={error} 
+        type="error" 
+        message="Locatiile nu au putut fi incarcate!" 
+      />
+      { loading && <Loader /> }
+      
         <Map
             initialViewState={{...viewport}}
             style={{width: "100vw", height: "100vh"}}
@@ -78,17 +96,17 @@ export const CampsMap = () => {
           
           { MapPins }
 
-        {selectedPark ? (
+        {selectedCamping ? (
           <Popup
-            latitude={selectedPark.geometry.coordinates[1]}
-            longitude={selectedPark.geometry.coordinates[0]}
+            latitude={selectedCamping.location.latitude}
+            longitude={selectedCamping.location.longitude}
             onClose={() => {
-              setSelectedPark(null);
+              setSelectedCamping(null);
             }}
           >
             <div>
-              <h2>{selectedPark.properties.NAME}</h2>
-              <p>{selectedPark.properties.DESCRIPTIO}</p>
+              <h2>{selectedCamping.name}</h2>
+              <p>{selectedCamping.description}</p>
             </div>
           </Popup>
         ) : null}

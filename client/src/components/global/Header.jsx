@@ -17,11 +17,17 @@ import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
 
 import "../../style/Header.scss";
 
-const pages = [
+const MAIN_PAGES = [
   { text: "Camps Map", url: "/camps-map" }, 
   { text: "Dashboard", url: "/dashboard" }
 ];
-const settings = [
+
+const ADMIN_PAGES = [
+  { text: "Home", url: "/" }, 
+  { text: "Dashboard", url: "/dashboard" }
+];
+
+const SETTINGS = [
   { text: "Profile", url: "/admin/profile" }, 
   { text: "Camps", url: "/admin/camps" },
   { text: "Logout", url: "/logout" }
@@ -30,6 +36,8 @@ const settings = [
 export function Header({ user, type, open, setOpen }) {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+
+  const getHeaderMenu = type === "main" ? MAIN_PAGES : ADMIN_PAGES;
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -51,7 +59,7 @@ export function Header({ user, type, open, setOpen }) {
   };
 
   return (
-    <AppBar position="fixed" open={open} 
+    <AppBar position="static" open={open} 
       sx={{
         backdropFilter: 'blur(12px)',
         top: 0,
@@ -78,62 +86,44 @@ export function Header({ user, type, open, setOpen }) {
           >
             <NavLink   to="/">LOGO</NavLink  >
           </Typography>
-
-          { type === 'main' ?  
-            (
-              <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                <IconButton
-                  size="large"
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  onClick={handleOpenNavMenu}
-                  color="inherit"
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorElNav}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                  }}
-                  open={Boolean(anchorElNav)}
-                  onClose={handleCloseNavMenu}
-                  sx={{
-                    display: { xs: 'block', md: 'none' },
-                  }}
-                >
-                  {pages.map((page) => (
-                    <MenuItem key={page.text} onClick={handleCloseNavMenu}>
-                        <NavLink   to={page.url}>{page.text}</NavLink  >
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </Box>
-            )
-            :
-            (
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                edge="start"
-                sx={{
-                  marginRight: 5,
-                  ...(open && { display: 'none' }),
-                }}
-              >
-                <MenuIcon />
-              </IconButton>
-            )
-          }
+            
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: 'block', md: 'none' },
+              }}
+            >
+              {getHeaderMenu.map((page) => (
+                <MenuItem key={page.text} onClick={handleCloseNavMenu}>
+                    <NavLink   to={page.url}>{page.text}</NavLink  >
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+        
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
@@ -157,13 +147,13 @@ export function Header({ user, type, open, setOpen }) {
          
           
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-          {type === 'main' && pages.map((page) => (
+          {getHeaderMenu.map((page) => (
             <Button
               key={page.text}
               onClick={handleCloseNavMenu}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
-              <NavLink   to={page.url}>{page.text}</NavLink  >
+              <NavLink to={page.url}>{page.text}</NavLink  >
             </Button>
           ))}
         </Box>
@@ -195,7 +185,7 @@ export function Header({ user, type, open, setOpen }) {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                   >
-                    {settings.map((setting) => (
+                    {SETTINGS.map((setting) => (
                       <MenuItem key={setting.text} onClick={handleCloseUserMenu} className="user-menu">
                         <NavLink   to={setting.url}>{setting.text}</NavLink  >
                       </MenuItem>

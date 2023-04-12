@@ -38,7 +38,6 @@ export const MapSearch = (props) => {
     }
   );
 
-  // @ts-ignore (TS2339) private member
   if (geocoder._map) {
     if (geocoder.getProximity() !== props.proximity && props.proximity !== undefined) {
       geocoder.setProximity(props.proximity);
@@ -76,19 +75,6 @@ export const MapSearch = (props) => {
     if (geocoder.getOrigin() !== props.origin && props.origin !== undefined) {
       geocoder.setOrigin(props.origin);
     }
-    // Types missing from @types/mapbox__mapbox-gl-geocoder
-    // if (geocoder.getAutocomplete() !== props.autocomplete && props.autocomplete !== undefined) {
-    //   geocoder.setAutocomplete(props.autocomplete);
-    // }
-    // if (geocoder.getFuzzyMatch() !== props.fuzzyMatch && props.fuzzyMatch !== undefined) {
-    //   geocoder.setFuzzyMatch(props.fuzzyMatch);
-    // }
-    // if (geocoder.getRouting() !== props.routing && props.routing !== undefined) {
-    //   geocoder.setRouting(props.routing);
-    // }
-    // if (geocoder.getWorldview() !== props.worldview && props.worldview !== undefined) {
-    //   geocoder.setWorldview(props.worldview);
-    // }
   }
   return marker;
 }
