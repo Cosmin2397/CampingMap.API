@@ -18,7 +18,11 @@ export const CampsMap = () => {
         zoom: 10
     });
 
-    const {data, loading, error} = useGetQuery('api/Campings')
+    const {getRequest, data, loading, error} = useGetQuery('api/Campings')
+
+    useEffect(() => {
+      getRequest()
+    }, [])
 
     const MapPins = useMemo(
       () =>

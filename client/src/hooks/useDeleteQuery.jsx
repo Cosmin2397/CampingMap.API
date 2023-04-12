@@ -2,18 +2,18 @@ import { useState } from "react"
 import axios from "axios"
 
 
-export const usePostQuery = (endpoint_path, data) => {
+export const useDeleteQuery = (endpoint_path) => {
 
     const [response,setResponse] = useState(null)
     const [error,setError] = useState(null)
     const [loading,setLoading] = useState(false)
 
 
-    const postRequest = async () => {
+    const deleteRequest = async () => {
         try{
             setLoading(true)
-            const response = await axios.post(process.env.REACT_APP_API_URL + endpoint_path, data)
-            setResponse(response.data)
+            const response = await axios.delete(process.env.REACT_APP_API_URL + endpoint_path)
+            setResponse(response)
         }catch(err){
             setError(err)
         }finally{
@@ -22,6 +22,6 @@ export const usePostQuery = (endpoint_path, data) => {
     }
         
 
-    return { postRequest, response, error, loading }
+    return { deleteRequest, response, error, loading }
 
 }

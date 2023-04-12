@@ -8,6 +8,13 @@
     }
 }
 
+.message-success {
+    .MuiPaper-root {
+        background-color: variables.$success;
+        color: #fff;
+    }
+}
+
 //Loader
 .default-loader {
     position: absolute;
@@ -21,4 +28,16 @@
         color: variables.$primary-color;
     }
     background-color: variables.$dark-overlay;
+}
+
+//Modal
+.default-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 400px;
+    background-color: #000;
+    border: 2px solid #000;
+    padding: 10px;
 }

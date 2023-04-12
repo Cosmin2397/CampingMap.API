@@ -36,9 +36,8 @@ function getStyles(facility, campingFacility, theme) {
   };
 }
 
-export function FacilitiesSelect() {
+export function FacilitiesSelect({ campingFacilities, setCampingFacilities }) {
   const theme = useTheme();
-  const [campingFacilities, setCampingFacilities] = useState([]);
 
   const handleChange = (event) => {
     const {
@@ -47,6 +46,7 @@ export function FacilitiesSelect() {
     setCampingFacilities(
       typeof value === 'string' ? value.split(',') : value,
     );
+    console.log({campingFacilities})
   };
 
   return (

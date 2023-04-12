@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 import {
   Table,
   TableBody,
@@ -10,10 +10,16 @@ import {
   IconButton,
   Drawer,
   Button,
-} from "@mui/material";
-import { Delete as DeleteIcon, Edit as EditIcon, Add as AddIcon } from "@mui/icons-material";
+} from "@mui/material"
+import { Delete as DeleteIcon, Edit as EditIcon, Add as AddIcon } from "@mui/icons-material"
 import Stack from '@mui/material/Stack';
 import { ManageCampingForm } from '../ManageCampingForm'
+import Link from '@mui/material/Link';
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+
+import '../../style/Common.scss';
 
 export const CustomTable = ({ 
   columns, 
@@ -24,22 +30,26 @@ export const CustomTable = ({
   formData, 
   setFormData, 
   selectedRow, 
-  setSelectedRow 
+  setSelectedRow,
+  openingHours,
+  setOpeningHours,
+  location,
+  setLocation,
+  campingFacilities,
+  setCampingFacilities
 }) => {
-  const [drawerOpen, setDrawerOpen] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(null)
+  const [openDeleteModal, setOpenDeleteModal] = useState(false)
 
-  const handleAdd = () => {
-    setDrawerOpen('add');
-  };
 
   const handleEdit = (row) => {
     setSelectedRow(row);
     setFormData(row);
-    setDrawerOpen('edit');
   };
 
   const handleDelete = (row) => {
     onDelete(row);
+    setOpenDeleteModal(false)
   };
 
   const handleDrawerClose = () => {
@@ -56,10 +66,15 @@ export const CustomTable = ({
     handleDrawerClose();
   };
 
+  const handleSelectDelete = (row) => {
+    setSelectedRow(row);
+    setOpenDeleteModal(true)
+  }
+
   return (
     <>
      <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{ paddingBottom: '10px' }}>
-        <Button color="primary" variant="contained" onClick={handleAdd}>
+        <Button color="primary" variant="contained" href="/dashboard/add-camping">
           <AddIcon />Add Camping
         </Button>
       </Stack>
@@ -80,10 +95,12 @@ export const CustomTable = ({
                   <TableCell key={column.field}>{row[column.field]}</TableCell>
                 ))}
                 <TableCell>
-                  <IconButton onClick={() => handleEdit(row)}>
+                <Link onClick={() => handleEdit(row)} href={`/dashboard/edit-camping/${selectedRow?.id}`} variant="body2">
+                  <IconButton>
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => handleDelete(row)}>
+                  </Link>
+                  <IconButton onClick={() => handleSelectDelete(row)}>
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>
@@ -92,6 +109,24 @@ export const CustomTable = ({
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Delete item modal */}
+      <Modal
+        open={openDeleteModal}
+        onClose={() => setOpenDeleteModal(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="default-modal">
+          <Typography id="modal-modal-title" variant="h6" component="h5">
+            Are you sure you want to delete camping <b>{selectedRow?.name}</b>?
+          </Typography>
+          <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{ paddingTop: '20px' }}>
+            <Button color="primary" onClick={() => setOpenDeleteModal(false)}>Cancel</Button>
+            <Button color="error" variant="contained" onClick={handleDelete}>Delete</Button>
+          </Stack>
+        </Box>
+      </Modal>
       <Drawer 
         anchor="bottom" 
         open={!!drawerOpen} 
@@ -104,6 +139,12 @@ export const CustomTable = ({
                 columns={columns} 
                 drawerOpen={drawerOpen}
                 formData={formData}
+                openingHours={openingHours}
+                setOpeningHours={setOpeningHours}
+                location={location}
+                setLocation={setLocation}
+                campingFacilities={campingFacilities}
+                setCampingFacilities={setCampingFacilities}
                 handleFormChange={handleFormChange}
               />
               <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{ paddingTop: '20px' }}>

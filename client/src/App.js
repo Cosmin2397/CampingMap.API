@@ -3,10 +3,12 @@ import { CampsMap } from './components/CampsMap'
 import { MainLayout } from './layouts/MainLayout'
 import { Home } from './pages/Home'
 import { UserAccessView } from './pages/global/UserAccessView'
-
-import './App.scss'
 import { AdminLayout } from "./layouts/AdminLayout"
 import { Dasboard } from "./pages/admin/Dasboard"
+import { EditCamping } from "./pages/admin/EditCamping"
+import { AddCamping } from "./pages/admin/AddCamping"
+
+import './App.scss'
 
 const AUTH_USER = {
   name: 'Test',
@@ -32,6 +34,8 @@ function App() {
           {/* Admin pages route */}
           <Route path="dashboard" element={<AdminLayout user={AUTH_USER}/>}>
             <Route index element={<Dasboard />} />
+            <Route path="add-camping" element={<AddCamping />} />
+            <Route path="edit-camping/:id" element={<EditCamping />} />
           </Route>
         </Routes>
       </BrowserRouter>
