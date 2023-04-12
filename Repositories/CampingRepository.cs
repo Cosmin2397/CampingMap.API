@@ -13,21 +13,18 @@ namespace CampingMap.API.Repositories
         private readonly IReviewRepository _reviewRepository;
         private readonly IRatingRepository _ratingRepository;
         private readonly IPhotoRepository _photoRepository;
-        private readonly ICampingFacilitiesRepository _campingFacilitiesRepository;
 
         public CampingRepository(AppDbContext context, 
             ILocationRepository locationRepository,
             IReviewRepository reviewRepository,
             IRatingRepository ratingRepository,
-            IPhotoRepository photoRepository,
-            ICampingFacilitiesRepository campingFacilitiesRepository)
+            IPhotoRepository photoRepository)
         {
             _context = context;
             _locationRepository = locationRepository;
             _reviewRepository = reviewRepository;
             _ratingRepository = ratingRepository;
             _photoRepository = photoRepository;
-            _campingFacilitiesRepository = campingFacilitiesRepository;
         }
 
         public async Task<Camping> AddCamping(Camping camping)
@@ -79,7 +76,6 @@ namespace CampingMap.API.Repositories
                 camping.Photos = await _photoRepository.GetCampingPhotos(camping.Id);
                 camping.Rating = await _ratingRepository.GetCampingRating(camping.Id);
                 camping.Location = await _locationRepository.GetLocationByCampingId(camping.Id);
-                camping.Facilities = await _campingFacilitiesRepository.GetCampingFacilities(camping.Id);
             }
             if (campings == null)
             {

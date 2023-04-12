@@ -12,10 +12,6 @@ namespace CampingMap.API.Data
 
         public DbSet<Camping> Campings { get; set; }
 
-        public DbSet<CampingFacilities> CampingFacilities { get; set; }
-
-        public DbSet<Facility> Facilities { get; set; }
-
         public DbSet<Location> Locations { get; set; }
 
         public DbSet<Photo> Photos{ get; set; }
@@ -23,8 +19,6 @@ namespace CampingMap.API.Data
         public DbSet<Rating> Ratings{ get; set; }
 
         public DbSet<Review> Reviews { get; set; }
-
-        public DbSet<User> Users => Set<User>();
 
     }
 }

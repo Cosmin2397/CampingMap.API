@@ -1,5 +1,6 @@
 ﻿using CampingMap.API.Models;
 using CampingMap.API.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,8 @@ namespace CampingMap.API.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Camping>))]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<IEnumerable<Camping>>> GetCampings()
         {
             var campings = await _campingRepository.GetCampings();
@@ -24,6 +27,8 @@ namespace CampingMap.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(200, Type = typeof(Camping))]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<Camping>> GetCampingById(Guid id)
         {
             var camping = await _campingRepository.GetCampingById(id);
@@ -87,6 +92,8 @@ namespace CampingMap.API.Controllers
         }
 
         [HttpGet("city/{id}")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Camping>))]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<IEnumerable<Camping>>> GetCampignsByCity(string id)
         {
             var campings = await _campingRepository.GetCityCampings(id);
@@ -100,6 +107,8 @@ namespace CampingMap.API.Controllers
         }
 
         [HttpGet("county/{id}")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Camping>))]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<IEnumerable<Camping>>> GetCampignsByCounty(string id)
         {
             var campings = await _campingRepository.GetCountyCampings(id);
@@ -113,6 +122,8 @@ namespace CampingMap.API.Controllers
         }
 
         [HttpGet("region/{id}")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Camping>))]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<IEnumerable<Camping>>> GetCampignsByRegion(string id)
         {
             var campings = await _campingRepository.GetCampingsByRegion(id);
