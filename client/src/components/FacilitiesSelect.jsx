@@ -46,7 +46,6 @@ export function FacilitiesSelect({ campingFacilities, setCampingFacilities }) {
     setCampingFacilities(
       typeof value === 'string' ? value.split(',') : value,
     );
-    console.log({campingFacilities})
   };
 
   return (

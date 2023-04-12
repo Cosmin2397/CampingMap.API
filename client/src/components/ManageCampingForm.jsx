@@ -30,6 +30,7 @@ export function ManageCampingForm({ data, type }) {
     ...formData,
     openingHours: `${dayjs(openingHours?.start).locale('en').format('h:mm A')} - ${dayjs(openingHours?.end).locale('en').format('h:mm A')}`,
     location,
+    facilities: String(campingFacilities)
 
   }
   const  {postRequest, response: responseAdd,  error: errorAdd } = usePostQuery(
