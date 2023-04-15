@@ -30,7 +30,7 @@ namespace CampingMap.API.Controllers
         }
 
         [HttpPost("signUp")]
-        public async Task<IActionResult> SignUpAsync([FromForm] SignUp model)
+        public async Task<IActionResult> SignUpAsync([FromBody] SignUp model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -47,7 +47,7 @@ namespace CampingMap.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginAsync([FromForm] Login model)
+        public async Task<IActionResult> LoginAsync([FromBody] Login model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

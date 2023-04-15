@@ -24,10 +24,10 @@ const Copyright = () => {
 }
 
 export const UserAccessView = () => {
-  const [value, setValue] = useState(0);
+  const [tabIndex, setTabIndex] = useState(0);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleChange = (event, newtabIndex) => {
+    setTabIndex(newtabIndex);
   };
 
 
@@ -40,7 +40,7 @@ export const UserAccessView = () => {
         sm={4}
         md={7}
         sx={{
-        backgroundImage: 'url(https://source.unsplash.com/random)',
+        backgroundImage: 'url(https://source.unsplash.com/xr-y6Ruw7K8)',
         backgroundRepeat: 'no-repeat',
         backgroundColor: (t) =>
             t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -50,7 +50,7 @@ export const UserAccessView = () => {
     />
     <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
     <Tabs
-      value={value}
+      value={tabIndex}
       onChange={handleChange}
       aria-label="user access tabs"
       centered
@@ -59,10 +59,10 @@ export const UserAccessView = () => {
         <Tab icon={<LockOutlinedIcon />} label="Create account" iconPosition="start"/>
        
     </Tabs>
-     <TabPanel value={value} index={0}>
-        <SignIn isLogin={value === 0}/>
+     <TabPanel value={tabIndex} index={0}>
+        <SignIn isLogin={tabIndex === 0}/>
     </TabPanel>
-    <TabPanel value={value} index={1}>
+    <TabPanel value={tabIndex} index={1}>
         <SignUp />
     </TabPanel>
     <Copyright sx={{ mt: 5 }} />

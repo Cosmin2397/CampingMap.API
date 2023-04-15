@@ -51,15 +51,15 @@ useEffect(() => {
   }
 
 
-  const { getRequest, data, error } = useGetQuery('api/Campings')
+  const { getRequest, data, error } = useGetQuery('Campings')
 
   const  {putRequest, response, loading: loadingAdd, error: errorAdd } = usePutQuery(
-    `api/Campings/${selectedRow?.id}`, 
+    `Campings/${selectedRow?.id}`, 
     updatedCampingData
   )
 
   const  {deleteRequest, response: responseDelete, error: errorDelete } = useDeleteQuery(
-    `api/Campings/${selectedRow?.id}`, 
+    `Campings/${selectedRow?.id}`, 
     updatedCampingData
   )
 

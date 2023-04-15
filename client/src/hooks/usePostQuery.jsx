@@ -13,7 +13,7 @@ export const usePostQuery = (endpoint_path, data) => {
         try{
             setLoading(true)
             const response = await axios.post(process.env.REACT_APP_API_URL + endpoint_path, data)
-            setResponse(response.data)
+            setResponse(response)
         }catch(err){
             setError(err)
         }finally{
