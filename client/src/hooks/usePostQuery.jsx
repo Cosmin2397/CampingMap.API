@@ -9,10 +9,14 @@ export const usePostQuery = (endpoint_path, data) => {
     const [loading,setLoading] = useState(false)
 
 
-    const postRequest = async () => {
+    const postRequest = async (useCredentials) => {
         try{
             setLoading(true)
-            const response = await axios.post(process.env.REACT_APP_API_URL + endpoint_path, data)
+            const response = await axios.post(
+                process.env.REACT_APP_API_URL + endpoint_path, 
+                data,  
+                { withCredentials: useCredentials ?? false }
+            )
             setResponse(response)
         }catch(err){
             setError(err)

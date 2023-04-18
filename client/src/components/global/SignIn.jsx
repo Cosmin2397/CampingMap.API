@@ -7,7 +7,6 @@ import Link from '@mui/material/Link';
 import { usePostQuery } from '../../hooks/usePostQuery'
 import { Message } from '../common/Message'
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react'
 
 
 export const SignIn = () => {
@@ -52,10 +51,9 @@ export const SignIn = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        postRequest()
+        postRequest(true)
         if(responseLogin && !loadingLogin) {
             setUserData(null)
-            navigate('/dashboard')
         }
 
     };

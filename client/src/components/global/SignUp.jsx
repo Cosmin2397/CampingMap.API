@@ -43,7 +43,7 @@ export const SignUp = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        postRequest()
+        postRequest(true)
         if(responseAdd) {
             setUserData({})
         }
