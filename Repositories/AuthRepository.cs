@@ -1,4 +1,6 @@
-﻿using CampingMap.API.Models.Auth;
+﻿using CampingMap.API.Data;
+using CampingMap.API.Models;
+using CampingMap.API.Models.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -16,13 +18,15 @@ namespace CampingMap.API.Repositories
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly JWT _Jwt;
+        private readonly DefaultDbContext _context;
 
 
-        public AuthRepository(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IOptions<JWT> jwt)
+        public AuthRepository(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IOptions<JWT> jwt, DefaultDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _Jwt = jwt.Value;
+            _context = context;
         }
 
         private async Task<JwtSecurityToken> CreateJwtAsync(AppUser user)
@@ -259,6 +263,11 @@ namespace CampingMap.API.Repositories
             await _userManager.UpdateAsync(user);
 
             return true;
+        }
+
+        public async Task<AppUser> GetUserAsync(string userId)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
         }
 
     }

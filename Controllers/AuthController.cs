@@ -2,6 +2,7 @@
 using CampingMap.API.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CampingMap.API.Controllers
 {
@@ -109,6 +110,22 @@ namespace CampingMap.API.Controllers
                 return BadRequest("Token is Invalid");
 
             return Ok();
+        }
+
+        [HttpGet("current")]
+        public async Task<IActionResult> GetCurrentAsync()
+        {
+            var userId = User.FindFirstValue("userId");
+
+            if (string.IsNullOrEmpty(userId))
+                return BadRequest("User not found");
+
+            var user = await _authRepository.GetUserAsync(userId);
+
+            if (user == null)
+                return BadRequest("User not found");
+
+            return Ok(user);
         }
     }
 }
