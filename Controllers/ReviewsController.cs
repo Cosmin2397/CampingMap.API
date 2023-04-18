@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CampingMap.API.Data;
 using CampingMap.API.Models;
 using CampingMap.API.Repositories;
+using System.Security.Claims;
 
 namespace CampingMap.API.Controllers
 {
@@ -85,7 +86,7 @@ namespace CampingMap.API.Controllers
         {
             try
             {
-
+                review.UserId = User.FindFirstValue("userId");
                 await _reviewRepository.AddReview(review);
                 if (review == null)
                 {

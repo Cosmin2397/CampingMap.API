@@ -6,6 +6,8 @@ namespace CampingMap.API.Repositories
     {
         Task<IEnumerable<Camping>> GetCampings();
 
+        Task<IEnumerable<Camping>> GetUserCampings(string userId);
+
         Task<IEnumerable<Camping>> GetCampingsByRegion(string region);
 
         Task<IEnumerable<Camping>> GetCountyCampings(string county);
