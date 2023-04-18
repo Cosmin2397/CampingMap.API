@@ -7,6 +7,7 @@ import { AdminLayout } from "./layouts/AdminLayout"
 import { Dasboard } from "./pages/admin/Dasboard"
 import { EditCamping } from "./pages/admin/EditCamping"
 import { AddCamping } from "./pages/admin/AddCamping"
+import { UserProvider } from './context/UserContext';
 
 import './App.scss'
 
@@ -17,29 +18,31 @@ const AUTH_USER = {
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          {/* Front pages route */}
-          <Route path="/" element={<MainLayout user={AUTH_USER} />}>
-              <Route index element={<Home />} />
-              <Route path="camps-map" element={<CampsMap />} />
+    <UserProvider>
+      <div className="App">
+        <BrowserRouter>
+          <Routes>
+            {/* Front pages route */}
+            <Route path="/" element={<MainLayout user={AUTH_USER} />}>
+                <Route index element={<Home />} />
+                <Route path="camps-map" element={<CampsMap />} />
 
-              <Route path="*" element={<p>There's nothing here: 404!</p>} />
-          </Route>
+                <Route path="*" element={<p>There's nothing here: 404!</p>} />
+            </Route>
 
-          {/* Pages without layout */}
-          <Route path="sign-in" element={<UserAccessView />}/>
-          
-          {/* Admin pages route */}
-          <Route path="dashboard" element={<AdminLayout user={AUTH_USER}/>}>
-            <Route index element={<Dasboard />} />
-            <Route path="add-camping" element={<AddCamping />} />
-            <Route path="edit-camping/:id" element={<EditCamping />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
+            {/* Pages without layout */}
+            <Route path="sign-in" element={<UserAccessView />}/>
+            
+            {/* Admin pages route */}
+            <Route path="dashboard" element={<AdminLayout user={AUTH_USER}/>}>
+              <Route index element={<Dasboard />} />
+              <Route path="add-camping" element={<AddCamping />} />
+              <Route path="edit-camping/:id" element={<EditCamping />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </UserProvider>
   );
 }
 

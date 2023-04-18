@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { NavLink } from 'react-router-dom';
 import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
+import { UserContext } from '../../context/UserContext'
 
 import "../../style/Header.scss";
 
@@ -37,7 +38,10 @@ export function Header({ user, type, open, setOpen }) {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
-  const getHeaderMenu = type === "main" ? MAIN_PAGES : ADMIN_PAGES;
+  const getHeaderMenu = type === "main" ? MAIN_PAGES : ADMIN_PAGES
+
+  const { authUser } = useContext(UserContext)
+  console.log({authUser})
 
   const handleDrawerOpen = () => {
     setOpen(true);
