@@ -119,7 +119,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
-
+app.UseMiddleware<TokenMiddleware>();
 
 app.UseAuthentication();
 
