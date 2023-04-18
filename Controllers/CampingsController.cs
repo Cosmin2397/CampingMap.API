@@ -3,6 +3,7 @@ using CampingMap.API.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CampingMap.API.Controllers
 {
@@ -26,6 +27,18 @@ namespace CampingMap.API.Controllers
             return Ok(campings);
         }
 
+        [HttpGet("userCampings")]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Camping>))]
+        [ProducesResponseType(400)]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<Camping>>> GetUserCampings()
+        {
+            var userId = User.FindFirstValue("userId");
+            var campings = await _campingRepository.GetUserCampings(userId);
+            return Ok(campings);
+        }
+
+
         [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(Camping))]
         [ProducesResponseType(400)]
@@ -46,7 +59,7 @@ namespace CampingMap.API.Controllers
         {
             try
             {
-
+                camping.UserId = User.FindFirstValue("userId");
                 await _campingRepository.AddCamping(camping);
                 if (camping == null)
                 {
@@ -63,24 +76,38 @@ namespace CampingMap.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult<Camping>> PutCamping(Guid id, Camping camping)
         {
-            var updatedCamping = await _campingRepository.UpdateCamping(id, camping);
+            if (camping.UserId == User.FindFirstValue("userId"))
+            {
+                var updatedCamping = await _campingRepository.UpdateCamping(id, camping);
 
-            return Ok(updatedCamping);
+                return Ok(updatedCamping);
+            }
+            return BadRequest();
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteCamping(Guid id)
         {
+            var camping = await _campingRepository.GetCampingById(id);
             try
             {
-
-                var camping = await _campingRepository.DeleteCamping(id);
-                if (camping== null)
+                if (camping.UserId == User.FindFirstValue("userId"))
+                {
+                    await _campingRepository.DeleteCamping(id);
+                }
+                else if (camping == null)
                 {
                     return NotFound();
                 }
+                else
+                {
+                    return BadRequest();
+                }
+                
 
                 return Ok();
 
