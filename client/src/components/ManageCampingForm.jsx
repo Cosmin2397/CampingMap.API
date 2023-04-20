@@ -34,7 +34,7 @@ export function ManageCampingForm({ data, type }) {
 
   }
   const  {postRequest, response: responseAdd,  error: errorAdd } = usePostQuery(
-    `api/Campings`, 
+    `Campings`, 
     updatedCampingData
   )
 

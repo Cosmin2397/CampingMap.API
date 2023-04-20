@@ -18,7 +18,7 @@ export const CampsMap = () => {
         zoom: 10
     });
 
-    const {getRequest, data, loading, error} = useGetQuery('api/Campings')
+    const {getRequest, data, loading, error} = useGetQuery('Campings')
 
     useEffect(() => {
       getRequest()

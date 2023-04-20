@@ -119,7 +119,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+app.UseCors(policy =>
+    policy.WithOrigins("http://localhost:3000", "https://localhost:3000")
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .AllowCredentials()
+);
 app.UseMiddleware<TokenMiddleware>();
 
 app.UseAuthentication();

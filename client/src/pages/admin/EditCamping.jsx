@@ -7,7 +7,7 @@ import { Message } from '../../components/common/Message'
 
 export const EditCamping = () => {
     const { id } = useParams()
-    const { getRequest, data, loading, error } = useGetQuery(`api/Campings/${id}`)
+    const { getRequest, data, loading, error } = useGetQuery(`Campings/${id}`)
 
     useEffect(() => {
       getRequest()
