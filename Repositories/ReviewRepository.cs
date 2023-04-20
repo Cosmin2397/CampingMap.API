@@ -21,8 +21,7 @@ namespace CampingMap.API.Repositories
             }
             else
             {
-                review.Id = Guid.NewGuid();
-                await _context.Reviews.AddAsync(review);
+                review.Id = Guid.NewGuid();                await _context.Reviews.AddAsync(review);
                 await _context.SaveChangesAsync();
                 return review;
             }

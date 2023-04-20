@@ -37,6 +37,7 @@ builder.Services.AddScoped<ILocationRepository, LocationRepository>();
 builder.Services.AddScoped<ICampingRepository, CampingRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -44,8 +45,8 @@ builder.Services.AddAuthentication(options =>
 })
     .AddJwtBearer(b =>
     {
-        b.RequireHttpsMetadata = false;
-        b.SaveToken = false;
+        b.RequireHttpsMetadata = true;
+        b.SaveToken = true;
         b.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,

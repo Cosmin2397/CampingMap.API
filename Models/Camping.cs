@@ -34,6 +34,8 @@ namespace CampingMap.API.Models
 
         public string? Facilities { get; set; }
 
+        public string? UserId { get; set; }
+
 
     }
 }

@@ -84,6 +84,23 @@ namespace CampingMap.API.Repositories
             return campings;
         }
 
+        public async Task<IEnumerable<Camping>> GetUserCampings(string userId)
+        {
+            var userCampings = await _context.Campings.Where(c => c.UserId == userId).ToListAsync();
+            foreach (var camping in userCampings)
+            {
+                camping.Reviews = await _reviewRepository.GetCampingReviews(camping.Id);
+                camping.Photos = await _photoRepository.GetCampingPhotos(camping.Id);
+                camping.Rating = await _ratingRepository.GetCampingRating(camping.Id);
+                camping.Location = await _locationRepository.GetLocationByCampingId(camping.Id);
+            }
+            if (userCampings == null)
+            {
+                return new List<Camping>();
+            }
+            return userCampings;
+        }
+
         public async Task<IEnumerable<Camping>> GetCampingsByRegion(string region)
         {
             var campings = await GetCampings();

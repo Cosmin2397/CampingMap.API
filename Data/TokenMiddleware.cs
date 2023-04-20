@@ -9,11 +9,13 @@
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task InvokeAsync(HttpContext context)
         {
-            if (context.Request.Cookies.TryGetValue("refreshTokenKey", out var refreshToken))
+            var token = context.Request.Cookies["refreshTokenKey"];
+
+            if (!string.IsNullOrEmpty(token))
             {
-                context.Request.Headers.Add("Authorization", $"Bearer {refreshToken}");
+                context.Response.Headers.Add("Authorization", $"Bearer {token}");
             }
 
             await _next(context);
