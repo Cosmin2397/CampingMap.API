@@ -23,8 +23,11 @@ namespace CampingMap.API.Controllers
         {
             var cookieOptions = new CookieOptions
             {
-                HttpOnly = false,
+                HttpOnly = true,
                 Expires = expires.ToLocalTime(),
+                SameSite = SameSiteMode.None,
+                Path = "/",
+                Secure = true
             };
 
             Response.Cookies.Append("refreshTokenKey", refreshToken, cookieOptions);
