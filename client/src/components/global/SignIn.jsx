@@ -29,7 +29,7 @@ export const SignIn = () => {
            <Message 
              showMessage={responseLogin} 
              type="success" 
-             message="Account was successfully created" 
+             message="Login was successfully" 
            />
            :
            (
