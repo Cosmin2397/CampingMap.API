@@ -45,8 +45,8 @@ builder.Services.AddAuthentication(options =>
 })
     .AddJwtBearer(b =>
     {
-        b.RequireHttpsMetadata = true;
-        b.SaveToken = true;
+        b.RequireHttpsMetadata = false;
+        b.SaveToken = false;
         b.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
@@ -56,9 +56,11 @@ builder.Services.AddAuthentication(options =>
             ValidIssuer = builder.Configuration["JWT:Issuer"],
             ValidAudience = builder.Configuration["JWT:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
+            NameClaimType = "userId"
         };
     });
 
+builder.Services.AddAuthorization();
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -125,7 +127,6 @@ app.UseCors(policy =>
     .AllowAnyHeader()
     .AllowCredentials()
 );
-app.UseMiddleware<TokenMiddleware>();
 
 app.UseAuthentication();
 

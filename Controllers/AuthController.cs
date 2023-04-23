@@ -23,11 +23,8 @@ namespace CampingMap.API.Controllers
         {
             var cookieOptions = new CookieOptions
             {
-                HttpOnly = true,
+                HttpOnly = false,
                 Expires = expires.ToLocalTime(),
-                Path = "/",
-                SameSite = SameSiteMode.None,
-                Secure = true,
             };
 
             Response.Cookies.Append("refreshTokenKey", refreshToken, cookieOptions);
@@ -46,7 +43,7 @@ namespace CampingMap.API.Controllers
                 return BadRequest(result.Message);
 
             SetRefreshTokenInCookies(result.RefreshToken, result.RefreshTokenExpiration);
-
+            
             return Ok(result);
         }
 
@@ -63,7 +60,7 @@ namespace CampingMap.API.Controllers
 
             if (!string.IsNullOrEmpty(result.RefreshToken))
                 SetRefreshTokenInCookies(result.RefreshToken, result.RefreshTokenExpiration);
-
+                
             return Ok(result);
         }
 
@@ -118,12 +115,8 @@ namespace CampingMap.API.Controllers
         [HttpGet("current")]
         public async Task<IActionResult> GetCurrentAsync()
         {
-            var userId = User.FindFirstValue("userId");
-
-            if (string.IsNullOrEmpty(userId))
-                return BadRequest("User not found");
-
-            var user = await _authRepository.GetUserAsync(userId);
+            var refreshToken = Request.Cookies["refreshTokenKey"];
+            var user = await _authRepository.GetUserAsync(refreshToken);
 
             if (user == null)
                 return BadRequest("User not found");

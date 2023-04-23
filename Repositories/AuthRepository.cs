@@ -71,7 +71,7 @@ namespace CampingMap.API.Repositories
         {
             var randomNumber = new byte[32];
 
-            using var generator = new RNGCryptoServiceProvider();
+            using var generator = RandomNumberGenerator.Create();
 
             generator.GetBytes(randomNumber);
 
@@ -265,9 +265,18 @@ namespace CampingMap.API.Repositories
             return true;
         }
 
-        public async Task<AppUser> GetUserAsync(string userId)
+        public async Task<AppUser> GetUserAsync(string refreshToken)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                return null;
+            }
+
+            var user = await _userManager.Users.Include(u => u.RefreshTokens)
+                .SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
+
+            return user;
         }
 
     }

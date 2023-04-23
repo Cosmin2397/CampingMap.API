@@ -14,6 +14,6 @@ namespace CampingMap.API.Repositories
 
         Task<bool> RevokeTokenAsync(string token);
 
-        Task<AppUser> GetUserAsync(string userId);
+        Task<AppUser> GetUserAsync(string refreshToken);
     }
 }
