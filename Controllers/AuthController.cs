@@ -82,8 +82,8 @@ namespace CampingMap.API.Controllers
             return Ok(model);
         }
 
-        [HttpGet("refreshToken")]
-        public async Task<IActionResult> RefreshTokenCheckAsync()
+        [HttpGet("current")]
+        public async Task<IActionResult> GetCurrentAsync()
         {
             var refreshToken = Request.Cookies["refreshTokenKey"];
 
@@ -113,18 +113,6 @@ namespace CampingMap.API.Controllers
                 return BadRequest("Token is Invalid");
 
             return Ok();
-        }
-
-        [HttpGet("current")]
-        public async Task<IActionResult> GetCurrentAsync()
-        {
-            var refreshToken = Request.Cookies["refreshTokenKey"];
-            var user = await _authRepository.GetUserAsync(refreshToken);
-
-            if (user == null)
-                return BadRequest("User not found");
-
-            return Ok(user);
         }
     }
 }
