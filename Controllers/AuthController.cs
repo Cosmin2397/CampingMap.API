@@ -63,7 +63,7 @@ namespace CampingMap.API.Controllers
 
             if (!string.IsNullOrEmpty(result.RefreshToken))
                 SetRefreshTokenInCookies(result.RefreshToken, result.RefreshTokenExpiration);
-                
+            
             return Ok(result);
         }
 
@@ -85,15 +85,15 @@ namespace CampingMap.API.Controllers
         [HttpGet("current")]
         public async Task<IActionResult> GetCurrentAsync()
         {
+
             var refreshToken = Request.Cookies["refreshTokenKey"];
 
-            var result = await _authRepository.RefreshTokenCheckAsync(refreshToken);
+            var result = await _authRepository.GetCurrentAsync(refreshToken);
 
-            if (!result.ISAuthenticated)
-                return BadRequest(result);
+            if (result.ISAuthenticated)
+                return Ok(result);
 
-
-            return Ok(result);
+            return BadRequest(result.Message);
         }
 
         [HttpPost("revokeToken")]

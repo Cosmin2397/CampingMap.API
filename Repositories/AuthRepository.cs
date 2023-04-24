@@ -264,5 +264,41 @@ namespace CampingMap.API.Repositories
 
             return true;
         }
+
+        public async Task<AuthModel> GetCurrentAsync(string token)
+        {
+            var auth = new AuthModel();
+
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == token));
+            
+            if (user == null)
+            {
+                auth.Message = "Invalid Token";
+                return auth;
+            }
+
+
+            var refreshToken = user.RefreshTokens.Single(t => t.Token == token);
+            if (!refreshToken.IsActive)
+            {
+                auth.Message = "Inactive Token";
+                return auth;
+            }
+            
+            var jwtSecurityToken = await CreateJwtAsync(user);
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            auth.Email = user.Email;
+            auth.Roles = roles.ToList();
+            auth.ISAuthenticated = true;
+            auth.UserName = user.UserName;
+            auth.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            auth.TokenExpiresOn = jwtSecurityToken.ValidTo;
+            auth.RefreshToken = refreshToken.Token;
+            auth.RefreshTokenExpiration = refreshToken.ExpireOn;
+            return auth;
+
+        }
     }
 }
