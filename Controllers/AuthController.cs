@@ -93,7 +93,18 @@ namespace CampingMap.API.Controllers
             if (result.ISAuthenticated)
                 return Ok(result);
 
-            return BadRequest(result.Message);
+            return Ok(result.Message);
+        }
+
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout()
+        {
+
+            var refreshToken = Request.Cookies["refreshTokenKey"];
+
+            var result = await _authRepository.Logout(refreshToken);
+            Response.Cookies.Delete("refreshTokenKey");
+            return Ok(result);
         }
 
         [HttpPost("revokeToken")]

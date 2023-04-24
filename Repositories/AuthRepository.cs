@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
+using NuGet.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -297,8 +299,25 @@ namespace CampingMap.API.Repositories
             auth.TokenExpiresOn = jwtSecurityToken.ValidTo;
             auth.RefreshToken = refreshToken.Token;
             auth.RefreshTokenExpiration = refreshToken.ExpireOn;
+  
             return auth;
 
+        }
+
+        public async Task<string> Logout(string token)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == token));
+            if(user == null)
+            {
+                return "No user logged!";
+            }
+
+            var refreshToken = user.RefreshTokens.Single(t => t.Token == token);
+            refreshToken.RevokedOn = DateTime.UtcNow;
+            var newRefreshToken = GenerateRefreshToken();
+            user.RefreshTokens.Add(newRefreshToken);
+            await _userManager.UpdateAsync(user);
+            return "User " + user.UserName + " have successfully logged out!";
         }
     }
 }
