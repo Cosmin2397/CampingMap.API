@@ -264,20 +264,5 @@ namespace CampingMap.API.Repositories
 
             return true;
         }
-
-        public async Task<AppUser> GetUserAsync(string refreshToken)
-        {
-
-            if (string.IsNullOrEmpty(refreshToken))
-            {
-                return null;
-            }
-
-            var user = await _userManager.Users.Include(u => u.RefreshTokens)
-                .SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
-
-            return user;
-        }
-
     }
 }
