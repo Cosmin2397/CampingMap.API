@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
+using NuGet.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -263,6 +265,59 @@ namespace CampingMap.API.Repositories
             await _userManager.UpdateAsync(user);
 
             return true;
+        }
+
+        public async Task<AuthModel> GetCurrentAsync(string token)
+        {
+            var auth = new AuthModel();
+
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == token));
+            
+            if (user == null)
+            {
+                auth.Message = "Invalid Token";
+                return auth;
+            }
+
+
+            var refreshToken = user.RefreshTokens.Single(t => t.Token == token);
+            if (!refreshToken.IsActive)
+            {
+                auth.Message = "Inactive Token";
+                return auth;
+            }
+            
+            var jwtSecurityToken = await CreateJwtAsync(user);
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            auth.Email = user.Email;
+            auth.Roles = roles.ToList();
+            auth.ISAuthenticated = true;
+            auth.UserName = user.UserName;
+            auth.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            auth.TokenExpiresOn = jwtSecurityToken.ValidTo;
+            auth.RefreshToken = refreshToken.Token;
+            auth.RefreshTokenExpiration = refreshToken.ExpireOn;
+  
+            return auth;
+
+        }
+
+        public async Task<string> Logout(string token)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == token));
+            if(user == null)
+            {
+                return "No user logged!";
+            }
+
+            var refreshToken = user.RefreshTokens.Single(t => t.Token == token);
+            refreshToken.RevokedOn = DateTime.UtcNow;
+            var newRefreshToken = GenerateRefreshToken();
+            user.RefreshTokens.Add(newRefreshToken);
+            await _userManager.UpdateAsync(user);
+            return "User " + user.UserName + " have successfully logged out!";
         }
     }
 }

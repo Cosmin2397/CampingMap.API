@@ -57,8 +57,6 @@ export const CampsMap = () => {
     
     const handleMapClick = (e) => {
       const features = e.features || [];
-      console.log({features})
-  
       // if (features.length > 0) {
       //   setPopupInfo({
       //     lngLat: features[0].geometry.coordinates,

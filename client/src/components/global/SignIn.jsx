@@ -17,7 +17,9 @@ export const SignIn = () => {
     )
 
     const navigate = useNavigate()
-    if(!!responseLogin && !loadingLogin) {
+
+    if(responseLogin?.data?.isAuthenticated && !loadingLogin) {
+        navigate(0)
         setTimeout(() => {
             navigate('/dashboard')
         }, 3000)

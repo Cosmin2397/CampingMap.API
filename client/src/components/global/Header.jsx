@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,7 +14,8 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { NavLink } from 'react-router-dom';
 import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
-import { UserContext } from '../../context/UserContext'
+import { useGetQuery } from '../../hooks/useGetQuery'
+import { useNavigate } from 'react-router-dom';
 
 import "../../style/Header.scss";
 
@@ -31,17 +32,19 @@ const ADMIN_PAGES = [
 const SETTINGS = [
   { text: "Profile", url: "/admin/profile" }, 
   { text: "Camps", url: "/admin/camps" },
-  { text: "Logout", url: "/logout" }
+  { text: "Logout", url: "#" }
 ];
 
-export function Header({ user, type, open, setOpen }) {
+export function Header({ user, type, open, setOpen, loadingUser }) {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
 
+  const navigate = useNavigate()
+
   const getHeaderMenu = type === "main" ? MAIN_PAGES : ADMIN_PAGES
 
-  const { authUser } = useContext(UserContext)
-  console.log({authUser})
+  const {getRequest: logoutRequest, response: logoutResponse} = useGetQuery('Auth/logout')
+
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -61,6 +64,21 @@ export function Header({ user, type, open, setOpen }) {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleLogout = (page) => {
+    if(page.text === 'Logout') {
+      logoutRequest()
+    }
+    navigate(0)
+
+    setTimeout(() => {
+      navigate('/sign-in')
+  }, 3000)
+  }
+
+  if(loadingUser) {
+    return <p>Loading...</p>
+  }
 
   return (
     <AppBar position="static" open={open} 
@@ -122,7 +140,7 @@ export function Header({ user, type, open, setOpen }) {
             >
               {getHeaderMenu.map((page) => (
                 <MenuItem key={page.text} onClick={handleCloseNavMenu}>
-                    <NavLink   to={page.url}>{page.text}</NavLink  >
+                    <NavLink to={page.url}>{page.text}</NavLink  >
                 </MenuItem>
               ))}
             </Menu>
@@ -165,12 +183,12 @@ export function Header({ user, type, open, setOpen }) {
         
 
           <Box sx={{ flexGrow: 0 }}>
-            { user?.name ? 
+            { (user && user?.isAuthenticated) && !loadingUser ? 
               (
                 <>
                   <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                      <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                      <Avatar alt={user?.userName} src="/static/images/avatar/2.jpg" />
                     </IconButton>
                   </Tooltip>
                   <Menu
@@ -191,7 +209,7 @@ export function Header({ user, type, open, setOpen }) {
                   >
                     {SETTINGS.map((setting) => (
                       <MenuItem key={setting.text} onClick={handleCloseUserMenu} className="user-menu">
-                        <NavLink   to={setting.url}>{setting.text}</NavLink  >
+                        <NavLink to={setting.url} onClick={() => handleLogout(setting)}>{setting.text}</NavLink>
                       </MenuItem>
                     ))}
                   </Menu>
@@ -199,9 +217,11 @@ export function Header({ user, type, open, setOpen }) {
               )
               :
               (
-                <Button variant="outlined" startIcon={<Person2OutlinedIcon />}>
-                  Login
-                </Button>
+               <NavLink to='/sign-in'>
+                  <Button variant="outlined" startIcon={<Person2OutlinedIcon />}>
+                    Login
+                  </Button>
+               </NavLink>
               )
 
             }

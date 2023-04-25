@@ -6,10 +6,13 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import { usePostQuery } from '../../hooks/usePostQuery'
 import { Message } from '../common/Message'
+import { useNavigate } from 'react-router-dom'
 
 
 export const SignUp = () => {
     const [userData, setUserData] = useState({})
+
+    const navigate = useNavigate()
     const  {postRequest, response: responseAdd,  error: errorAdd } = usePostQuery(
         `Auth/signUp`, 
         userData
@@ -45,7 +48,10 @@ export const SignUp = () => {
         event.preventDefault()
         postRequest(true)
         if(responseAdd) {
-            setUserData({})
+            navigate(0)
+            setTimeout(() => {
+                navigate('/dashboard')
+            }, 3000)
         }
 
     };

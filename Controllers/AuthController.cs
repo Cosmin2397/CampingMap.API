@@ -85,14 +85,25 @@ namespace CampingMap.API.Controllers
         [HttpGet("current")]
         public async Task<IActionResult> GetCurrentAsync()
         {
+
             var refreshToken = Request.Cookies["refreshTokenKey"];
 
-            var result = await _authRepository.RefreshTokenCheckAsync(refreshToken);
+            var result = await _authRepository.GetCurrentAsync(refreshToken);
 
-            if (!result.ISAuthenticated)
-                return BadRequest(result);
+            if (result.ISAuthenticated)
+                return Ok(result);
 
+            return Ok(result.Message);
+        }
 
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout()
+        {
+
+            var refreshToken = Request.Cookies["refreshTokenKey"];
+
+            var result = await _authRepository.Logout(refreshToken);
+            Response.Cookies.Delete("refreshTokenKey");
             return Ok(result);
         }
 
