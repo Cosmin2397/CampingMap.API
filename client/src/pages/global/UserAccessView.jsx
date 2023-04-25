@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
@@ -9,6 +9,8 @@ import Tab from '@mui/material/Tab';
 import { TabPanel } from '../../components/common/TabPanel';
 import { SignIn } from '../../components/global/SignIn';
 import { SignUp } from '../../components/global/SignUp';
+import { UserContext } from '../../context/UserContext'
+import { Navigate, useLocation } from 'react-router-dom'
 
 const Copyright = () => {
   return (
@@ -25,6 +27,12 @@ const Copyright = () => {
 
 export const UserAccessView = () => {
   const [tabIndex, setTabIndex] = useState(0);
+  const location = useLocation()
+  const { authUser } = useContext(UserContext)
+
+  if(authUser && authUser?.isAuthenticated) {
+    return <Navigate to="/dashboard" state={{ from: location }} replace />
+  }
 
   const handleChange = (event, newtabIndex) => {
     setTabIndex(newtabIndex);

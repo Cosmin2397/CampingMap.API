@@ -1,3 +1,4 @@
+import React from 'react'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { CampsMap } from './components/CampsMap'
 import { MainLayout } from './layouts/MainLayout'
@@ -11,19 +12,16 @@ import { UserProvider } from './context/UserContext';
 
 import './App.scss'
 
-const AUTH_USER = {
-  name: 'Test',
-  email: 'test@example.com'
-}
 
-function App() {
+const App = () => {
+
   return (
     <UserProvider>
       <div className="App">
         <BrowserRouter>
           <Routes>
             {/* Front pages route */}
-            <Route path="/" element={<MainLayout user={AUTH_USER} />}>
+            <Route path="/" element={<MainLayout />}>
                 <Route index element={<Home />} />
                 <Route path="camps-map" element={<CampsMap />} />
 
@@ -34,7 +32,7 @@ function App() {
             <Route path="sign-in" element={<UserAccessView />}/>
             
             {/* Admin pages route */}
-            <Route path="dashboard" element={<AdminLayout user={AUTH_USER}/>}>
+            <Route path="dashboard" element={<AdminLayout />}>
               <Route index element={<Dasboard />} />
               <Route path="add-camping" element={<AddCamping />} />
               <Route path="edit-camping/:id" element={<EditCamping />} />
