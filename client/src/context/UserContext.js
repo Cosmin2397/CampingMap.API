@@ -1,6 +1,5 @@
 import { createContext, useEffect } from 'react'
 import { useGetQuery } from '../hooks/useGetQuery'
-import jwt_decode from 'jwt-decode'
 
 
 export const UserContext = createContext()

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -14,8 +14,6 @@ import { FacilitiesSelect } from './FacilitiesSelect';
 import { usePostQuery } from '../hooks/usePostQuery'
 import { usePutQuery } from '../hooks/usePutQuery'
 import { Message } from './common/Message'
-import { UserContext } from '../context/UserContext'
-import jwt_decode from 'jwt-decode'
 import { useNavigate, useParams } from 'react-router-dom'
 
 const steps = ['General info', 'Location', 'Facilities'];
@@ -30,21 +28,11 @@ export function ManageCampingForm({ data, type }) {
   const [location, setLocation] = useState(data?.location)
   const [campingFacilities, setCampingFacilities] = useState(data?.facilities)
 
-  const { authUser } = useContext(UserContext)
   const navigate = useNavigate()
   const { id } = useParams()
 
-  const decodeUserId = () => {
-    if(authUser?.token) {
-      const { userId } = jwt_decode(authUser?.token)
-      return userId
-    }
-    return
-  }
-
   const updatedCampingData = {
     ...formData,
-    userId: decodeUserId(),
     // openingHours: `${dayjs(openingHours?.start).locale('en').format('h:mm A')} - ${dayjs(openingHours?.end).locale('en').format('h:mm A')}`,
     openingHours: `${openingHours?.start}-${openingHours?.end}`,
     location,
@@ -52,25 +40,22 @@ export function ManageCampingForm({ data, type }) {
 
   }
 
-  const  {postRequest, response: responseAdd,  error: errorAdd } = usePostQuery(
+  const  {postRequest, response: responseAdd, loading: loadingAdd, error: errorAdd } = usePostQuery(
     `Campings`, 
     updatedCampingData
   )
 
-  const  {putRequest: editRequest, response: responseEdit,  error: errorEdit } = usePutQuery(
+  const  {putRequest, response: responseEdit,  error: errorEdit } = usePutQuery(
     `Campings/${id}`, 
     updatedCampingData
   )
 
-  useEffect(() => {
-    if(!!responseAdd) {
-      setFormData(null)
-      setOpeningHours(null)
-      setLocation(null)
-      setCampingFacilities([])
-
-    }
-  }, [responseAdd])
+  if(responseEdit || responseAdd) {
+    setTimeout(() => {
+        navigate('/dashboard')
+    }, 3000)
+}
+console.log(responseAdd, responseEdit)
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -105,19 +90,13 @@ export function ManageCampingForm({ data, type }) {
     if(type === 'add') {
       postRequest()
     } else {
-      editRequest()
-    }
-    console.log(responseEdit, responseAdd)
-    if(responseEdit || responseAdd) {
-        setTimeout(() => {
-            navigate('/dashboard')
-        }, 3000)
+      putRequest()
     }
   }
 
   const AddRequestMessage = () => {
    return (
-    !!responseAdd && !!formData ?   
+    !!responseAdd && !!formData && !loadingAdd ? 
       <Message 
         showMessage={responseAdd} 
         type="success" 
