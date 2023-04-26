@@ -12,7 +12,6 @@ export const EditCamping = () => {
     useEffect(() => {
       getRequest()
     }, [])
-  
 
     if((!id || error)) {
         return <Navigate to="/dashboard" replace />

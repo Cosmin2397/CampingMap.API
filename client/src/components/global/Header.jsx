@@ -106,7 +106,7 @@ export function Header({ user, type, open, setOpen, loadingUser }) {
             }}
             className="logo"
           >
-            <NavLink   to="/">LOGO</NavLink  >
+            <NavLink to="/">LOGO</NavLink  >
           </Typography>
             
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
