@@ -1,4 +1,5 @@
 ﻿using CampingMap.API.Models;
+using CampingMap.API.Models.Auth;
 using CampingMap.API.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -61,7 +62,7 @@ namespace CampingMap.API.Controllers
                 return NotFound();
             }
 
-            return camping;
+            return Ok(camping);
         }
 
         [HttpPost]
@@ -69,13 +70,11 @@ namespace CampingMap.API.Controllers
         {
             try
             {
-                var token = Request.Cookies["refreshTokenKey"];
+                var user = GetUserAsync();
 
-                var user = await _authRepository.GetCurrentAsync(token);
-
-                if (user.ISAuthenticated)
+                if (user != null)
                 {
-                    camping.UserId = user.UserId;
+                    camping.UserId = user.Result.UserId;
                 }
                 await _campingRepository.AddCamping(camping);
                 if (camping == null)
@@ -96,7 +95,8 @@ namespace CampingMap.API.Controllers
         [Authorize]
         public async Task<ActionResult<Camping>> PutCamping(Guid id, Camping camping)
         {
-            if (camping.UserId == User.FindFirstValue("userId"))
+            var user = GetUserAsync();
+            if (camping.UserId == user.Result.UserId)
             {
                 var updatedCamping = await _campingRepository.UpdateCamping(id, camping);
 
@@ -112,7 +112,8 @@ namespace CampingMap.API.Controllers
             var camping = await _campingRepository.GetCampingById(id);
             try
             {
-                if (camping.UserId == User.FindFirstValue("userId"))
+                var user = GetUserAsync();
+                if (camping.UserId == user.Result.UserId)
                 {
                     await _campingRepository.DeleteCamping(id);
                 }
@@ -178,6 +179,20 @@ namespace CampingMap.API.Controllers
             }
 
             return Ok(campings);
+        }
+
+        public async Task<AuthModel> GetUserAsync()
+        {
+            var token = Request.Cookies["refreshTokenKey"];
+
+            var user = await _authRepository.GetCurrentAsync(token);
+
+            if (user.ISAuthenticated)
+            {
+                return user;
+            }
+
+            return null;
         }
 
     }
