@@ -1,19 +1,18 @@
-import { createContext, useState, useEffect } from 'react'
+import { createContext, useEffect } from 'react'
 import { useGetQuery } from '../hooks/useGetQuery'
 
 
 export const UserContext = createContext()
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const {getRequest, data: authUser, loading: loadingAuthUser, error} = useGetQuery('Auth/current')
 
-  const {getRequest, data, loading, error} = useGetQuery('Auth/current')
   useEffect(() => {
     getRequest()
   }, [])
-  console.log({ data })
+
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ authUser, loadingAuthUser }}>
       {children}
     </UserContext.Provider>
   );

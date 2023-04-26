@@ -46,7 +46,7 @@ namespace CampingMap.API.Controllers
                 return BadRequest(result.Message);
 
             SetRefreshTokenInCookies(result.RefreshToken, result.RefreshTokenExpiration);
-            
+
             return Ok(result);
         }
 
@@ -63,7 +63,7 @@ namespace CampingMap.API.Controllers
 
             if (!string.IsNullOrEmpty(result.RefreshToken))
                 SetRefreshTokenInCookies(result.RefreshToken, result.RefreshTokenExpiration);
-            
+
             return Ok(result);
         }
 

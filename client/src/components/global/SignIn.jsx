@@ -17,7 +17,9 @@ export const SignIn = () => {
     )
 
     const navigate = useNavigate()
-    if(!!responseLogin && !loadingLogin) {
+
+    if(responseLogin?.data?.isAuthenticated && !loadingLogin) {
+        navigate(0)
         setTimeout(() => {
             navigate('/dashboard')
         }, 3000)
@@ -29,7 +31,7 @@ export const SignIn = () => {
            <Message 
              showMessage={responseLogin} 
              type="success" 
-             message="Account was successfully created" 
+             message="Login was successfully" 
            />
            :
            (
