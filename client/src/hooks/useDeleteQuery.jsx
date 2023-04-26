@@ -12,7 +12,10 @@ export const useDeleteQuery = (endpoint_path) => {
     const deleteRequest = async () => {
         try{
             setLoading(true)
-            const response = await axios.delete(process.env.REACT_APP_API_URL + endpoint_path)
+            const response = await axios.delete(
+                process.env.REACT_APP_API_URL + endpoint_path, 
+                { withCredentials: true }
+            )
             setResponse(response)
         }catch(err){
             setError(err)

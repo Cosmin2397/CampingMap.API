@@ -12,7 +12,7 @@ export const MapSearch = (props) => {
     () => {
       const ctrl = new MapboxGeocoder({
         ...props,
-        marker: false,
+        marker: true,
         accessToken: props.mapboxAccessToken
       });
       ctrl.on('loading', props.onLoading);

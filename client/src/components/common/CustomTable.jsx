@@ -18,6 +18,7 @@ import Link from '@mui/material/Link';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import dayjs from 'dayjs'
 
 import '../../style/Common.scss';
 
@@ -92,7 +93,13 @@ export const CustomTable = ({
             {data?.map((row) => (
               <TableRow key={row.id}>
                 {columns?.slice(0, 5)?.map((column) => (
+                  column?.field !== 'openingHours' ? 
                   <TableCell key={column.field}>{row[column.field]}</TableCell>
+                  :
+                  <TableCell key={column.field}>
+                    {`${dayjs(row[column.field]?.split('-')[0]).locale('en').format('h:mm A')} - ${dayjs(row[column.field]?.split('-')[1]).locale('en').format('h:mm A')}`}
+                    {/* {`${row[column.field]}`} */}
+                    </TableCell>
                 ))}
                 <TableCell>
                 <Link onClick={() => handleEdit(row)} href={`/dashboard/edit-camping/${selectedRow?.id}`} variant="body2">

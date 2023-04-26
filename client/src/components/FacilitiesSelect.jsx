@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -30,7 +30,7 @@ const facilities = [
 function getStyles(facility, campingFacility, theme) {
   return {
     fontWeight:
-    campingFacility.indexOf(facility) === -1
+    campingFacility?.indexOf(facility) === -1
         ? theme.typography.fontWeightRegular
         : theme.typography.fontWeightMedium,
   };
@@ -38,6 +38,7 @@ function getStyles(facility, campingFacility, theme) {
 
 export function FacilitiesSelect({ campingFacilities, setCampingFacilities }) {
   const theme = useTheme();
+  const defaultFacilities = typeof campingFacilities === 'string' ? campingFacilities?.split(',') : campingFacilities
 
   const handleChange = (event) => {
     const {
@@ -56,7 +57,7 @@ export function FacilitiesSelect({ campingFacilities, setCampingFacilities }) {
           labelId="camping-facilities-label"
           id="camping-facilities"
           multiple
-          value={campingFacilities}
+          value={campingFacilities ? defaultFacilities : []}
           onChange={handleChange}
           input={<OutlinedInput id="select-multiple-chip" label="Camping facilities" />}
           renderValue={(selected) => (

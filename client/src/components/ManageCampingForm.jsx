@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -12,45 +12,50 @@ import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 import { ManageCampingLocation } from './ManageCampingLocation';
 import { FacilitiesSelect } from './FacilitiesSelect';
 import { usePostQuery } from '../hooks/usePostQuery'
+import { usePutQuery } from '../hooks/usePutQuery'
 import { Message } from './common/Message'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const steps = ['General info', 'Location', 'Facilities'];
 
 export function ManageCampingForm({ data, type }) {
   const [activeStep, setActiveStep] = useState(0)
-  const [ defaultFormData, setDefaultFormData] = useState()
-  const [formData, setFormData] = useState({
-    name: defaultFormData?.name
+  const [formData, setFormData] = useState(data)
+  const [openingHours, setOpeningHours] = useState({ 
+    start: data?.openingHours?.split('-')[0], 
+    end: data?.openingHours?.split('-')[1]
   })
-  const [openingHours, setOpeningHours] = useState({})
-  const [location, setLocation] = useState({})
-  const [campingFacilities, setCampingFacilities] = useState([])
+  const [location, setLocation] = useState(data?.location)
+  const [campingFacilities, setCampingFacilities] = useState(data?.facilities)
+
+  const navigate = useNavigate()
+  const { id } = useParams()
 
   const updatedCampingData = {
     ...formData,
-    openingHours: `${dayjs(openingHours?.start).locale('en').format('h:mm A')} - ${dayjs(openingHours?.end).locale('en').format('h:mm A')}`,
+    // openingHours: `${dayjs(openingHours?.start).locale('en').format('h:mm A')} - ${dayjs(openingHours?.end).locale('en').format('h:mm A')}`,
+    openingHours: `${openingHours?.start}-${openingHours?.end}`,
     location,
     facilities: String(campingFacilities)
 
   }
-  const  {postRequest, response: responseAdd,  error: errorAdd } = usePostQuery(
+
+  const  {postRequest, response: responseAdd, loading: loadingAdd, error: errorAdd } = usePostQuery(
     `Campings`, 
     updatedCampingData
   )
 
-  useEffect(() => {
-    setDefaultFormData(data)
-  }, [data])
+  const  {putRequest, response: responseEdit,  error: errorEdit } = usePutQuery(
+    `Campings/${id}`, 
+    updatedCampingData
+  )
 
-  useEffect(() => {
-    if(!!responseAdd) {
-      setFormData(null)
-      setOpeningHours(null)
-      setLocation(null)
-      setCampingFacilities([])
-
-    }
-  }, [responseAdd])
+  if(responseEdit || responseAdd) {
+    setTimeout(() => {
+        navigate('/dashboard')
+    }, 3000)
+}
+console.log(responseAdd, responseEdit)
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -84,27 +89,48 @@ export function ManageCampingForm({ data, type }) {
   const handleFormSubmit = () => {
     if(type === 'add') {
       postRequest()
+    } else {
+      putRequest()
     }
   }
 
-  const RequestMessage = () => {
+  const AddRequestMessage = () => {
    return (
-    !!responseAdd && !!formData ?   
+    !!responseAdd && !!formData && !loadingAdd ? 
       <Message 
         showMessage={responseAdd} 
         type="success" 
-        message={`Camping was successfully ${type === 'add' ? 'added' : 'edited'}.`}
+        message={`Camping was successfully added.`}
       />
       :
       (
         <Message 
           showMessage={errorAdd} 
           type="error" 
-          message={`Camping could not be ${type === 'add' ? 'added' : 'edited'}.`} 
+          message={`Camping could not be added.`} 
         />
       )
    )
   }
+
+  const EditRequestMessage = () => {
+    return (
+     !!responseEdit && !!formData ?   
+       <Message 
+         showMessage={responseEdit} 
+         type="success" 
+         message={`Camping was successfully edit.`}
+       />
+       :
+       (
+         <Message 
+           showMessage={errorEdit} 
+           type="error" 
+           message={`Camping could not be edited.`} 
+         />
+       )
+    )
+   }
 
   const FormFirstStep = () => {
     return (
@@ -114,7 +140,7 @@ export function ManageCampingForm({ data, type }) {
           key="name"
           label="Name"
           name="name"
-          // defaultValue={defaultFormData?.name}
+          defaultValue={formData?.name}
           value={formData?.name}
           onChange={handleFormChange}
         />
@@ -146,16 +172,16 @@ export function ManageCampingForm({ data, type }) {
           <MobileTimePicker 
               label="Opening hour start"
               name="start"
-              // value={dayjs(openingHours?.end) ?? dayjs(data?.openingHours?.split('-')[1])}
-              value={openingHours?.start}
+              // defaultValue={dayjs(openingHours?.start).locale('en').format('h:mm A')}
+              value={dayjs(openingHours?.start)}
               closeOnSelect={false}
               onAccept={handleStartHour}
           />   
           <MobileTimePicker 
             label="Opening hour end"
             name="end"
-            // value={dayjs(openingHours?.end) ?? dayjs(data?.openingHours?.split('-')[1])}
-            value={openingHours?.end}
+            // defaultValue={dayjs(openingHours?.end).locale('en').format('h:mm A')}
+            value={dayjs(openingHours?.end)}
             closeOnSelect={false}
             onAccept={handleEndHour}
           />
@@ -166,7 +192,7 @@ export function ManageCampingForm({ data, type }) {
   
   const FormSecondStep = () => {
     return (
-      <ManageCampingLocation location={location} setLocation={setLocation} />
+      <ManageCampingLocation location={location} setLocation={setLocation} userSavedAddress={location?.adress} />
     )
   }
 
@@ -181,7 +207,8 @@ export function ManageCampingForm({ data, type }) {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <RequestMessage />
+      <AddRequestMessage />
+      <EditRequestMessage />
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
           const stepProps = {};
