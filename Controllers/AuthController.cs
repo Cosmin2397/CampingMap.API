@@ -125,5 +125,19 @@ namespace CampingMap.API.Controllers
 
             return Ok();
         }
+
+        [HttpGet("refreshToken")]
+        public async Task<IActionResult> RefreshTokenCheckAsync()
+        {
+            var refreshToken = Request.Cookies["refreshTokenKey"];
+
+            var result = await _authRepository.RefreshTokenCheckAsync(refreshToken);
+
+            if (!result.ISAuthenticated)
+                return BadRequest(result);
+
+
+            return Ok(result);
+        }
     }
 }
