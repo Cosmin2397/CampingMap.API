@@ -321,5 +321,6 @@ namespace CampingMap.API.Repositories
             await _userManager.UpdateAsync(user);
             return "User " + user.UserName + " have successfully logged out!";
         }
+
     }
 }

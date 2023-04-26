@@ -70,11 +70,13 @@ namespace CampingMap.API.Controllers
         {
             try
             {
-                var user = GetUserAsync();
+                var token = Request.Cookies["refreshTokenKey"];
 
-                if (user != null)
+                var user = await _authRepository.GetCurrentAsync(token);
+
+                if (user.ISAuthenticated)
                 {
-                    camping.UserId = user.Result.UserId;
+                    camping.UserId = user.UserId;
                 }
                 await _campingRepository.AddCamping(camping);
                 if (camping == null)
@@ -95,12 +97,18 @@ namespace CampingMap.API.Controllers
         [Authorize]
         public async Task<ActionResult<Camping>> PutCamping(Guid id, Camping camping)
         {
-            var user = GetUserAsync();
-            if (camping.UserId == user.Result.UserId)
-            {
-                var updatedCamping = await _campingRepository.UpdateCamping(id, camping);
+            var token = Request.Cookies["refreshTokenKey"];
 
-                return Ok(updatedCamping);
+            var user = await _authRepository.GetCurrentAsync(token);
+
+            if (user.ISAuthenticated)
+            {
+                if (camping.UserId == user.UserId)
+                {
+                    var updatedCamping = await _campingRepository.UpdateCamping(id, camping);
+
+                    return Ok(updatedCamping);
+                }
             }
             return BadRequest();
         }
@@ -112,18 +120,24 @@ namespace CampingMap.API.Controllers
             var camping = await _campingRepository.GetCampingById(id);
             try
             {
-                var user = GetUserAsync();
-                if (camping.UserId == user.Result.UserId)
+                var token = Request.Cookies["refreshTokenKey"];
+
+                var user = await _authRepository.GetCurrentAsync(token);
+
+                if (user.ISAuthenticated)
                 {
-                    await _campingRepository.DeleteCamping(id);
-                }
-                else if (camping == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    return BadRequest();
+                    if (camping.UserId == user.UserId)
+                    {
+                        await _campingRepository.DeleteCamping(id);
+                    }
+                    else if (camping == null)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
                 }
                 
 
@@ -180,20 +194,5 @@ namespace CampingMap.API.Controllers
 
             return Ok(campings);
         }
-
-        public async Task<AuthModel> GetUserAsync()
-        {
-            var token = Request.Cookies["refreshTokenKey"];
-
-            var user = await _authRepository.GetCurrentAsync(token);
-
-            if (user.ISAuthenticated)
-            {
-                return user;
-            }
-
-            return null;
-        }
-
     }
 }
