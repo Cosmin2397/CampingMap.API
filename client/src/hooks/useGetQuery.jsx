@@ -12,7 +12,10 @@ export const useGetQuery = (endpoint_path) => {
         const getRequest = async (useCredentials) => {
             try{
                 setLoading(true)
-                const response = await axios.get(process.env.REACT_APP_API_URL + endpoint_path, { withCredentials: true })
+                const response = await axios.get(
+                    process.env.REACT_APP_API_URL + endpoint_path, 
+                    { withCredentials: true }
+                )
                 setData(response.data)
                 setReqResponse(response)
             }catch(err){
