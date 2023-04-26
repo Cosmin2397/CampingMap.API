@@ -162,6 +162,7 @@ namespace CampingMap.API.Repositories
             auth.Roles = roles.ToList();
             auth.ISAuthenticated = true;
             auth.UserName = user.UserName;
+            auth.UserId = user.Id;
             auth.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             auth.TokenExpiresOn = jwtSecurityToken.ValidTo;
             auth.Message = "Login Succeeded ";
@@ -295,6 +296,7 @@ namespace CampingMap.API.Repositories
             auth.Roles = roles.ToList();
             auth.ISAuthenticated = true;
             auth.UserName = user.UserName;
+            auth.UserId = user.Id;
             auth.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             auth.TokenExpiresOn = jwtSecurityToken.ValidTo;
             auth.RefreshToken = refreshToken.Token;

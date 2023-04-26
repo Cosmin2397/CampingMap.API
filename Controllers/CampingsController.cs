@@ -3,6 +3,7 @@ using CampingMap.API.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 
 namespace CampingMap.API.Controllers
@@ -12,10 +13,12 @@ namespace CampingMap.API.Controllers
     public class CampingsController : ControllerBase
     {
         private readonly ICampingRepository _campingRepository;
+        private readonly IAuthRepository _authRepository;
 
-        public CampingsController(ICampingRepository campingRepository)
+        public CampingsController(ICampingRepository campingRepository, IAuthRepository authRepository)
         {
             _campingRepository = campingRepository;
+            _authRepository = authRepository;
         }
 
         [HttpGet]
@@ -33,9 +36,16 @@ namespace CampingMap.API.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<Camping>>> GetUserCampings()
         {
-            var userId = User.FindFirstValue("userId");
-            var campings = await _campingRepository.GetUserCampings(userId);
-            return Ok(campings);
+            var token = Request.Cookies["refreshTokenKey"];
+
+            var user = await _authRepository.GetCurrentAsync(token);
+            var campings = await _campingRepository.GetUserCampings(user.UserId);
+            if (user.ISAuthenticated)
+            {
+                return Ok(campings);
+            }
+
+            return Unauthorized();
         }
 
 
@@ -59,7 +69,14 @@ namespace CampingMap.API.Controllers
         {
             try
             {
-                camping.UserId = User.FindFirstValue("userId");
+                var token = Request.Cookies["refreshTokenKey"];
+
+                var user = await _authRepository.GetCurrentAsync(token);
+
+                if (user.ISAuthenticated)
+                {
+                    camping.UserId = user.UserId;
+                }
                 await _campingRepository.AddCamping(camping);
                 if (camping == null)
                 {
