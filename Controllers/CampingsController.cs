@@ -34,7 +34,6 @@ namespace CampingMap.API.Controllers
         [HttpGet("userCampings")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Camping>))]
         [ProducesResponseType(400)]
-        [Authorize]
         public async Task<ActionResult<IEnumerable<Camping>>> GetUserCampings()
         {
             var token = Request.Cookies["refreshTokenKey"];
@@ -94,7 +93,6 @@ namespace CampingMap.API.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize]
         public async Task<ActionResult<Camping>> PutCamping(Guid id, Camping camping)
         {
             var token = Request.Cookies["refreshTokenKey"];
@@ -114,7 +112,6 @@ namespace CampingMap.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
         public async Task<IActionResult> DeleteCamping(Guid id)
         {
             var camping = await _campingRepository.GetCampingById(id);
