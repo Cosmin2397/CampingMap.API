@@ -51,7 +51,7 @@ useEffect(() => {
   }
 
 
-  const { getRequest, data, error } = useGetQuery('Campings')
+  const { getRequest, data, error } = useGetQuery('Campings/userCampings')
 
   const  {putRequest, response, loading: loadingAdd, error: errorAdd } = usePutQuery(
     `Campings/${selectedRow?.id}`, 
@@ -69,7 +69,9 @@ useEffect(() => {
 
   const onDelete = () => {
     deleteRequest()
-    getRequest()
+    if(responseDelete) {
+      getRequest()
+    }
   }
 
   return (
