@@ -8,11 +8,13 @@ import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import { CustomModal } from '../components/global/CustomModal'
 import { AddCampReview } from '../components/AddCampReview'
 import { UserContext } from '../context/UserContext'
+import { CampInfoDrawer } from '../components/CampInfoDrawer'
 
 export const CampsMapView = () => {
   const [showList, setShowList] = useState(true)
   const [openModal, setOpenModal] = useState(false)
   const [selectedCamp, setSelectedCamp] = useState(null)
+  const [drawerOpen, setDrawerOpen] = useState(false)
 
   const { authUser, loadingAuthUser } = useContext(UserContext)
 
@@ -38,6 +40,18 @@ export const CampsMapView = () => {
     }
   }
 
+  const handleOpenCampDrawer = (camp) => {
+    setSelectedCamp(camp)
+    setDrawerOpen(true)
+  }
+
+  const handleCloseCampDrawer = () => {
+    setDrawerOpen(false)
+    if(!drawerOpen) {
+      setSelectedCamp(null)
+    }
+  }
+
   return (
     <div className='camps-view'>
       { showList ?
@@ -48,6 +62,7 @@ export const CampsMapView = () => {
           handleOpenReviewModal={handleOpenReviewModal}
           authUser={authUser}
           loadingAuthUser={loadingAuthUser}
+          handleOpenCampDrawer={handleOpenCampDrawer}
         /> :
         <CampsMap 
           camps={data} 
@@ -56,6 +71,7 @@ export const CampsMapView = () => {
           selectedCamp={selectedCamp}
           setSelectedCamp={setSelectedCamp}
           handleOpenReviewModal={handleOpenReviewModal}
+          handleOpenCampDrawer={handleOpenCampDrawer}
         />
       }
        <Fab variant="extended" size="medium" color="primary" onClick={handlSwitchView}>
@@ -75,6 +91,11 @@ export const CampsMapView = () => {
         content={<AddCampReview campingId={selectedCamp?.id} userId={authUser?.userId} closeModal={handleCloseReviewModal}/>}
         open={openModal}
         handleClose={handleCloseReviewModal}
+      />
+      <CampInfoDrawer 
+        selectedCamp={selectedCamp}
+        drawerOpen={drawerOpen}
+        handleDrawerClose={handleCloseCampDrawer}
       />
     </div>
   )

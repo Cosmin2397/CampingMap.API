@@ -8,7 +8,8 @@ export const CampsList = ({
   error: errorCamps, 
   handleOpenReviewModal,
   authUser,
-  loadingAuthUser
+  loadingAuthUser,
+  handleOpenCampDrawer
 }) => {
   return (
     <Grid container rowSpacing={3} columnSpacing={3} sx={{ padding: '25px' }}>
@@ -20,6 +21,7 @@ export const CampsList = ({
               handleOpenReviewModal={handleOpenReviewModal}
               authUser={authUser}
               loadingAuthUser={loadingAuthUser}
+              handleOpenCampDrawer={handleOpenCampDrawer}
             />
           </Grid>
         )) }

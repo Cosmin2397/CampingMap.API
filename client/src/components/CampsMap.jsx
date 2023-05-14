@@ -21,7 +21,8 @@ export const CampsMap = ({
   error, 
   handleOpenReviewModal, 
   selectedCamp, 
-  setSelectedCamp
+  setSelectedCamp,
+  handleOpenCampDrawer
 }) => {
     const [viewport, setViewport] = useState({
         latitude: 47.13,
@@ -115,7 +116,7 @@ export const CampsMap = ({
             </div>
             <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{ mt: 2 }}>
               <Button size="small" variant="text" color="secondary" onClick={() => handleOpenReviewModal(selectedCamp)}>Add review</Button>
-              <Button size="small" variant="contained">View more</Button>
+              <Button size="small" variant="contained" onClick={() => handleOpenCampDrawer(selectedCamp)}>View more</Button>
             </Stack>
           </Popup>
         ) : null}

@@ -19,7 +19,8 @@ export const CampCard = ({
   loadingCamps, 
   handleOpenReviewModal,
   authUser,
-  loadingAuthUser
+  loadingAuthUser,
+  handleOpenCampDrawer
 }) => {
 
   return (
@@ -47,8 +48,7 @@ export const CampCard = ({
             <Typography gutterBottom variant="h5" component="div">
               { camp?.name }
             </Typography>
-              <Rating name="camp-review" value={camp?.rating} readOnly />
-              <Divider textAlign="left" sx={{ mb: 1 }}>Location</Divider>
+              <Rating name="camp-review" value={camp?.rating} readOnly precision={0.5} />
               <Chip icon={<LocationOnIcon />} label={camp?.location?.adress} /> 
             
             <Divider textAlign="left" sx={{ mt: 2 }}>Description</Divider>
@@ -57,8 +57,15 @@ export const CampCard = ({
             </Typography>
           </CardContent>
           <CardActions sx={{ "justifyContent": "flex-end", "padding": "15px" }}>
-            <Button size="small" variant="text" color="secondary" onClick={() => handleOpenReviewModal(camp)}>Add review</Button>
-            <Button size="small" variant="contained">View more</Button>
+            { authUser?.isAuthenticated && 
+              <Button 
+                size="small" 
+                variant="text" 
+                color="secondary" 
+                onClick={() => handleOpenReviewModal(camp)}
+              >Add review</Button> 
+            }
+            <Button size="small" variant="contained" onClick={() => handleOpenCampDrawer(camp)}>View more</Button>
           </CardActions>
       </Card>
       </>
