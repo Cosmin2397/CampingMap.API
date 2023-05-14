@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import "../../style/Header.scss";
 
 const MAIN_PAGES = [
-  { text: "Camps Map", url: "/camps-map" }, 
+  { text: "Campings", url: "/campings" }, 
   { text: "Dashboard", url: "/dashboard" }
 ];
 
