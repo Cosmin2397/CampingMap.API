@@ -17,10 +17,12 @@ namespace CampingMap.API.Controllers
     public class ReviewsController : ControllerBase
     {
         private readonly IReviewRepository _reviewRepository;
+        private readonly IAuthRepository _authRepository;
 
-        public ReviewsController(IReviewRepository reviewRepository)
+        public ReviewsController(IReviewRepository reviewRepository, IAuthRepository authRepository)
         {
             _reviewRepository = reviewRepository;
+            _authRepository = authRepository;
         }
 
         // GET: api/Reviews
@@ -86,7 +88,14 @@ namespace CampingMap.API.Controllers
         {
             try
             {
-                review.UserId = User.FindFirstValue("userId");
+                var token = Request.Cookies["refreshTokenKey"];
+
+                var user = await _authRepository.GetCurrentAsync(token);
+                if (user.UserId == null)
+                {
+                    return BadRequest();
+                }
+                review.UserId = user.UserId;
                 await _reviewRepository.AddReview(review);
                 if (review == null)
                 {
