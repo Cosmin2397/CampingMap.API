@@ -16,7 +16,7 @@ export const AddCampReview = ({ campingId, userId, closeModal }) => {
         campingId,
         userId
     }
-    const  {postRequest, loading: loadingAddReview, response: responsAddReview,  error: errorAddReview } = usePostQuery(
+    const  {postRequest, loading: loadingAddReview, response: responseAddReview,  error: errorAddReview } = usePostQuery(
         'Reviews', 
         formattedReviewData
     )
@@ -24,12 +24,8 @@ export const AddCampReview = ({ campingId, userId, closeModal }) => {
 
     const RequestMessage = () => {
         return (
-         !!responsAddReview && !!reviewData && !loadingAddReview ?   
-           <Message 
-             showMessage={responsAddReview} 
-             type="success" 
-             message="Review was successfully added" 
-           />
+         !!responseAddReview && !!reviewData && !loadingAddReview ?   
+           closeModal() 
            :
            (
              <Message 
@@ -40,7 +36,7 @@ export const AddCampReview = ({ campingId, userId, closeModal }) => {
            )
         )
        }
-    
+    console.log(responseAddReview?.status === 200 && !loadingAddReview)
     const handleFormChange = (event) => {
         setReviewData(prevState => ({
         ...prevState,
@@ -52,11 +48,6 @@ export const AddCampReview = ({ campingId, userId, closeModal }) => {
         event.preventDefault()
         if(userId && campingId) {
             postRequest()
-        }
-
-        if(responsAddReview && !loadingAddReview) {
-            setReviewData(null)
-            closeModal()
         }
     };
   return (

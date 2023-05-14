@@ -23,7 +23,7 @@ const App = () => {
             {/* Front pages route */}
             <Route path="/" element={<MainLayout />}>
                 <Route index element={<Home />} />
-                <Route path="camps-map" element={<CampsMapView />} />
+                <Route path="campings" element={<CampsMapView />} />
 
                 <Route path="*" element={<p>There's nothing here: 404!</p>} />
             </Route>

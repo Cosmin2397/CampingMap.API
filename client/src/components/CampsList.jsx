@@ -9,7 +9,8 @@ export const CampsList = ({
   handleOpenReviewModal,
   authUser,
   loadingAuthUser,
-  handleOpenCampDrawer
+  handleOpenCampDrawer,
+  addReviewAllowed
 }) => {
   return (
     <Grid container rowSpacing={3} columnSpacing={3} sx={{ padding: '25px' }}>
@@ -22,6 +23,7 @@ export const CampsList = ({
               authUser={authUser}
               loadingAuthUser={loadingAuthUser}
               handleOpenCampDrawer={handleOpenCampDrawer}
+              addReviewAllowed={addReviewAllowed}
             />
           </Grid>
         )) }

@@ -52,6 +52,13 @@ export const CampsMapView = () => {
     }
   }
 
+  const addReviewAllowed = (campReviews) => {
+    if(campReviews?.length) {
+      return campReviews?.some(review => review?.userId !== authUser?.userId)
+    }
+    return true
+  }
+
   return (
     <div className='camps-view'>
       { showList ?
@@ -63,6 +70,7 @@ export const CampsMapView = () => {
           authUser={authUser}
           loadingAuthUser={loadingAuthUser}
           handleOpenCampDrawer={handleOpenCampDrawer}
+          addReviewAllowed={addReviewAllowed}
         /> :
         <CampsMap 
           camps={data} 
@@ -72,6 +80,8 @@ export const CampsMapView = () => {
           setSelectedCamp={setSelectedCamp}
           handleOpenReviewModal={handleOpenReviewModal}
           handleOpenCampDrawer={handleOpenCampDrawer}
+          authUser={authUser}
+          addReviewAllowed={addReviewAllowed}
         />
       }
        <Fab variant="extended" size="medium" color="primary" onClick={handlSwitchView}>
@@ -88,7 +98,7 @@ export const CampsMapView = () => {
       </Fab>
       <CustomModal 
         title={`Add review for ${selectedCamp?.name} camp`}
-        content={<AddCampReview campingId={selectedCamp?.id} userId={authUser?.userId} closeModal={handleCloseReviewModal}/>}
+        content={<AddCampReview campingId={selectedCamp?.id} userId={authUser?.userId} closeModal={() => handleCloseReviewModal()}/>}
         open={openModal}
         handleClose={handleCloseReviewModal}
       />

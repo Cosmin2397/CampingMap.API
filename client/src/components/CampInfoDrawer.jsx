@@ -8,6 +8,7 @@ import Chip from '@mui/material/Chip';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Rating from '@mui/material/Rating';
 import Divider from '@mui/material/Divider'
+import Avatar from '@mui/material/Avatar'
 import PhonelinkRingOutlinedIcon from '@mui/icons-material/PhonelinkRingOutlined';
 import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 
@@ -25,7 +26,6 @@ export const CampInfoDrawer = ({ selectedCamp, drawerOpen, handleDrawerClose }) 
             { selectedCamp?.name }
             <CloseIcon onClick={handleDrawerClose} sx={{'cursor': 'pointer' }} color='primary'/>
         </Typography>
-        <Rating name="camp-review" value={selectedCamp?.rating} readOnly precision={0.5} size="large" />
 
         <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
             <Chip icon={<PhonelinkRingOutlinedIcon />} color='primary'  label={selectedCamp?.phoneNumber} /> 
@@ -44,6 +44,21 @@ export const CampInfoDrawer = ({ selectedCamp, drawerOpen, handleDrawerClose }) 
         <Typography variant="body2" color="text.secondary">
         { selectedCamp?.description }
         </Typography>
+
+        <Divider textAlign="left" sx={{ mt: 2 }}>Reviews</Divider>
+        { selectedCamp?.reviews?.length ? 
+           selectedCamp?.reviews?.map(review => (
+            <Stack key={review?.id} sx={{ my: 2 }} display="flex" flexDirection="row" alignItems="center" gap={2}>
+                <Avatar src="/static/images/avatar/2.jpg" />
+                <Stack>
+                    <Rating name="camp-review" value={review?.rating} readOnly precision={0.5} />
+                    <Typography variant='p' component='p'>{review?.description}</Typography>
+                </Stack>
+            </Stack>
+           ))
+           :
+           <Typography variant='p' component='p'>No reviews found...</Typography>
+        }
        </Box>
       </Drawer>
     </div>

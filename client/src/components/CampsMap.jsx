@@ -22,7 +22,9 @@ export const CampsMap = ({
   handleOpenReviewModal, 
   selectedCamp, 
   setSelectedCamp,
-  handleOpenCampDrawer
+  handleOpenCampDrawer,
+  authUser,
+  addReviewAllowed
 }) => {
     const [viewport, setViewport] = useState({
         latitude: 47.13,
@@ -111,11 +113,20 @@ export const CampsMap = ({
           >
             <div>
               <h2>{selectedCamp?.name}</h2>
-              <Rating name="camp-review" value={selectedCamp?.rating} readOnly />
+              <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 2 }}>
+                <Rating name="camp-review" value={selectedCamp?.rating} readOnly />({selectedCamp?.reviews?.length})
+              </Stack>
               <Chip icon={<LocationOnIcon />} label={selectedCamp?.location?.adress} /> 
             </div>
             <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{ mt: 2 }}>
-              <Button size="small" variant="text" color="secondary" onClick={() => handleOpenReviewModal(selectedCamp)}>Add review</Button>
+            { authUser?.isAuthenticated && addReviewAllowed(selectedCamp?.reviews) ?
+              <Button 
+                size="small" 
+                variant="text" 
+                color="secondary" 
+                onClick={() => handleOpenReviewModal(selectedCamp)}
+              >Add review</Button> : '' 
+            }
               <Button size="small" variant="contained" onClick={() => handleOpenCampDrawer(selectedCamp)}>View more</Button>
             </Stack>
           </Popup>

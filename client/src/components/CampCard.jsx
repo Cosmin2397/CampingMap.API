@@ -12,6 +12,7 @@ import Chip from '@mui/material/Chip';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Rating from '@mui/material/Rating';
 import Divider from '@mui/material/Divider'
+import Stack from '@mui/material/Stack'
 
 
 export const CampCard = ({ 
@@ -20,7 +21,8 @@ export const CampCard = ({
   handleOpenReviewModal,
   authUser,
   loadingAuthUser,
-  handleOpenCampDrawer
+  handleOpenCampDrawer,
+  addReviewAllowed
 }) => {
 
   return (
@@ -48,7 +50,9 @@ export const CampCard = ({
             <Typography gutterBottom variant="h5" component="div">
               { camp?.name }
             </Typography>
-              <Rating name="camp-review" value={camp?.rating} readOnly precision={0.5} />
+            <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 2 }}>
+              <Rating name="camp-review" value={camp?.rating} readOnly precision={0.5} />({camp?.reviews?.length})
+            </Stack>
               <Chip icon={<LocationOnIcon />} label={camp?.location?.adress} /> 
             
             <Divider textAlign="left" sx={{ mt: 2 }}>Description</Divider>
@@ -57,13 +61,13 @@ export const CampCard = ({
             </Typography>
           </CardContent>
           <CardActions sx={{ "justifyContent": "flex-end", "padding": "15px" }}>
-            { authUser?.isAuthenticated && 
+            { authUser?.isAuthenticated && addReviewAllowed(camp?.reviews) ?
               <Button 
                 size="small" 
                 variant="text" 
                 color="secondary" 
                 onClick={() => handleOpenReviewModal(camp)}
-              >Add review</Button> 
+              >Add review</Button> : '' 
             }
             <Button size="small" variant="contained" onClick={() => handleOpenCampDrawer(camp)}>View more</Button>
           </CardActions>
