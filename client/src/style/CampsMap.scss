@@ -1,0 +1,22 @@
+@use 'variables';
+
+.camps-view {
+   .pointer-popup {
+    top: -18px;
+    .mapboxgl-popup-close-button {
+        color: variables.$primary-color;
+        font-size: 20px;
+    }
+    .mapboxgl-popup-tip {
+        border-top-color: #000;
+    }
+    .mapboxgl-popup-content {
+        background: #000;
+    }
+   }
+   .MuiFab-root {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+   }
+}

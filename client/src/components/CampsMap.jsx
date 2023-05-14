@@ -2,50 +2,55 @@ import React, { useState, useMemo, useEffect } from 'react'
 import Map, { Marker, Popup, FullscreenControl, GeolocateControl, NavigationControl, ScaleControl } from 'react-map-gl'
 import MapPin from "./MapPin"
 import { MapSearch } from './MapSearch'
-import { useGetQuery } from '../hooks/useGetQuery'
 import { Message } from './common/Message'
 import { Loader } from './common/Loader'
+import Button from '@mui/material/Button'
+import Stack from '@mui/material/Stack'
+import Rating from '@mui/material/Rating'
+import Chip from '@mui/material/Chip'
+import LocationOnIcon from '@mui/icons-material/LocationOn'
 
 
 import 'mapbox-gl/dist/mapbox-gl.css'
+import '../style/CampsMap.scss'
 
 
-export const CampsMap = () => {
-    const [selectedCamping, setSelectedCamping] = useState(null);
+export const CampsMap = ({ 
+  camps, 
+  loading,
+  error, 
+  handleOpenReviewModal, 
+  selectedCamp, 
+  setSelectedCamp
+}) => {
     const [viewport, setViewport] = useState({
-        latitude: 45.4211,
-        longitude: -75.6903,
-        zoom: 10
+        latitude: 47.13,
+        longitude: 27.57,
+        zoom: 6
     });
-
-    const {getRequest, data, loading, error} = useGetQuery('Campings')
-
-    useEffect(() => {
-      getRequest()
-    }, [])
 
     const MapPins = useMemo(
       () =>
-      data?.map(camping => (
+      camps?.map(camping => (
         <Marker
           key={camping.id}
           latitude={camping.location.latitude}
           longitude={camping.location.longitude}
           onClick={e => {
             e.originalEvent.stopPropagation();
-            setSelectedCamping(camping);
+            setSelectedCamp(camping);
           }}
         >
           <MapPin />
         </Marker>
       )),
-      []
+      [camps]
     );
 
     useEffect(() => {
       const listener = e => {
         if (e.key === "Escape") {
-          setSelectedCamping(null);
+          setSelectedCamp(null);
         }
       };
       window.addEventListener("keydown", listener);
@@ -94,18 +99,24 @@ export const CampsMap = () => {
           
           { MapPins }
 
-        {selectedCamping ? (
+        {selectedCamp ? (
           <Popup
-            latitude={selectedCamping.location.latitude}
-            longitude={selectedCamping.location.longitude}
+            latitude={selectedCamp?.location?.latitude}
+            longitude={selectedCamp?.location?.longitude}
             onClose={() => {
-              setSelectedCamping(null);
+              setSelectedCamp(null);
             }}
+            className='pointer-popup'
           >
             <div>
-              <h2>{selectedCamping.name}</h2>
-              <p>{selectedCamping.description}</p>
+              <h2>{selectedCamp?.name}</h2>
+              <Rating name="camp-review" value={selectedCamp?.rating} readOnly />
+              <Chip icon={<LocationOnIcon />} label={selectedCamp?.location?.adress} /> 
             </div>
+            <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{ mt: 2 }}>
+              <Button size="small" variant="text" color="secondary" onClick={() => handleOpenReviewModal(selectedCamp)}>Add review</Button>
+              <Button size="small" variant="contained">View more</Button>
+            </Stack>
           </Popup>
         ) : null}
         </Map>

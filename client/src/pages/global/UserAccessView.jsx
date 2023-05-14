@@ -3,7 +3,6 @@ import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { TabPanel } from '../../components/common/TabPanel';
@@ -11,19 +10,6 @@ import { SignIn } from '../../components/global/SignIn';
 import { SignUp } from '../../components/global/SignUp';
 import { UserContext } from '../../context/UserContext'
 import { Navigate, useLocation } from 'react-router-dom'
-
-const Copyright = () => {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 export const UserAccessView = () => {
   const [tabIndex, setTabIndex] = useState(0);
@@ -73,7 +59,6 @@ export const UserAccessView = () => {
     <TabPanel value={tabIndex} index={1}>
         <SignUp />
     </TabPanel>
-    <Copyright sx={{ mt: 5 }} />
     </Grid>
     </Grid>
       </div>

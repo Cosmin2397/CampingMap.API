@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { CampsMap } from './components/CampsMap'
+import { CampsMapView } from './pages/CampsMapView'
 import { MainLayout } from './layouts/MainLayout'
 import { Home } from './pages/Home'
 import { UserAccessView } from './pages/global/UserAccessView'
@@ -23,7 +23,7 @@ const App = () => {
             {/* Front pages route */}
             <Route path="/" element={<MainLayout />}>
                 <Route index element={<Home />} />
-                <Route path="camps-map" element={<CampsMap />} />
+                <Route path="camps-map" element={<CampsMapView />} />
 
                 <Route path="*" element={<p>There's nothing here: 404!</p>} />
             </Route>
