@@ -76,6 +76,7 @@ namespace CampingMap.API.Controllers
                 if (user.ISAuthenticated)
                 {
                     camping.UserId = user.UserId;
+                    camping.UserName = user.UserName;
                 }
                 await _campingRepository.AddCamping(camping);
                 if (camping == null)
