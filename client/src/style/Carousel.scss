@@ -1,0 +1,22 @@
+@use 'variables';
+
+
+.slick-dots {
+    li {
+        button {
+            &:before {
+                color: #fff;
+                font-size: 12px;
+                opacity: .8;
+            }
+        }
+        &.slick-active {
+            button {
+                &:before {
+                    color: variables.$primary-color;
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}
