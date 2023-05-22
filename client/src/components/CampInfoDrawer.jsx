@@ -11,6 +11,8 @@ import Divider from '@mui/material/Divider'
 import Avatar from '@mui/material/Avatar'
 import PhonelinkRingOutlinedIcon from '@mui/icons-material/PhonelinkRingOutlined';
 import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
+import QueryBuilderOutlinedIcon from '@mui/icons-material/QueryBuilderOutlined';
+import dayjs from 'dayjs'
 
 
 export const CampInfoDrawer = ({ selectedCamp, drawerOpen, handleDrawerClose }) => {
@@ -32,7 +34,13 @@ export const CampInfoDrawer = ({ selectedCamp, drawerOpen, handleDrawerClose }) 
             <Chip icon={<AttachMoneyOutlinedIcon />} color='primary' label={`${selectedCamp?.price} $/HOUR`} /> 
         </Stack>
 
-        <Divider textAlign="left" sx={{ mb: 1 }}>Location</Divider>
+        <Divider textAlign="left" sx={{ mb: 1 }}>Opening hours</Divider>
+        <Chip 
+          icon={<QueryBuilderOutlinedIcon />} 
+          label={`${dayjs(selectedCamp?.openingHours?.split('-')[0]).locale('en').format('h:mm A')} - ${dayjs(selectedCamp?.openingHours?.split('-')[1]).locale('en').format('h:mm A')}`} 
+        /> 
+
+        <Divider textAlign="left" sx={{ mb: 1, mt: 1 }}>Location</Divider>
         <Chip icon={<LocationOnIcon />} label={selectedCamp?.location?.adress} /> 
 
         <Divider textAlign="left" sx={{ my: 1 }}>Facilities</Divider>

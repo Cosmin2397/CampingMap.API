@@ -19,6 +19,7 @@ import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import dayjs from 'dayjs'
+import { Link as ReactRouterLink } from 'react-router-dom';
 
 import '../../style/Common.scss';
 
@@ -75,7 +76,12 @@ export const CustomTable = ({
   return (
     <>
      <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{ paddingBottom: '10px' }}>
-        <Button color="primary" variant="contained" href="/dashboard/add-camping">
+        <Button 
+          color="primary" 
+          variant="contained" 
+          component={ReactRouterLink}
+          to="/dashboard/add-camping"
+        >
           <AddIcon />Add Camping
         </Button>
       </Stack>
@@ -98,7 +104,6 @@ export const CustomTable = ({
                   :
                   <TableCell key={column.field}>
                     {`${dayjs(row[column.field]?.split('-')[0]).locale('en').format('h:mm A')} - ${dayjs(row[column.field]?.split('-')[1]).locale('en').format('h:mm A')}`}
-                    {/* {`${row[column.field]}`} */}
                     </TableCell>
                 ))}
                 <TableCell>

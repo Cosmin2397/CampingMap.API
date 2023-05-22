@@ -1,10 +1,7 @@
-import { useState } from 'react'
 import { Avatar, Rating, Typography } from '@mui/material';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
 import Slider from 'react-slick';
-
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import "../../style/Carousel.scss"
 
 const TESTIMONIALS = [
     {
@@ -53,7 +50,7 @@ export const Testimonials = () => {
 
     const settings = {
         dots: true,
-        infinite: true,
+        infinite: false,
         speed: 500,
         slidesToShow: 3,
         slidesToScroll: 3,
@@ -61,15 +58,26 @@ export const Testimonials = () => {
 
   return (
     <section>
-      <Typography variant="h2" sx={{ color: 'primary.main', mb: 4 }}>
+      <Typography 
+        variant="h3" 
+        sx={{ 
+            color: 'primary.main', 
+            py: 10, 
+            textAlign: 'center',
+            letterSpacing: '4px',
+            textTransform: 'uppercase',
+            fontSize: '30px' 
+        }}
+      >
         What Our Customers Are Saying
       </Typography>
       <div>
        <Slider {...settings}>
         {
             TESTIMONIALS.map((testimonial) => (
-                <div key={testimonial.id} sx={{ display: 'flex', alignItems: 'center', my: 4 }}>
-                    <Avatar src={testimonial.image} alt={testimonial.name} sx={{ mr: 2 }} />
+               <Box sx={{ px: 2 }} key={testimonial?.id}>
+                 <Paper key={testimonial.id} sx={{ 'textAlign': 'center', py: 3 }}>
+                    <Avatar src={testimonial.image} alt={testimonial.name} sx={{ mx: 'auto' }} />
                     <div>
                     <Typography variant="h5">{testimonial.name}</Typography>
                     <Typography variant="body1" sx={{ mb: 2 }}>
@@ -77,7 +85,8 @@ export const Testimonials = () => {
                     </Typography>
                     <Rating value={testimonial.rating} readOnly />
                     </div>
-                </div>
+                </Paper>
+               </Box>
             ))
         }
        </Slider>

@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Header } from "../components/global/Header"
+import { Footer } from "../components/global/Footer"
 import { UserContext } from '../context/UserContext'
 
 export const MainLayout = ({ user }) => {
@@ -9,6 +10,7 @@ export const MainLayout = ({ user }) => {
     <div className='main-layout'>
       <Header user={authUser} loadingUser={loadingAuthUser} type="main"/>
       <main><Outlet /></main>
+      <Footer />
     </div>
   )
 }

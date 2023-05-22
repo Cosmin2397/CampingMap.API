@@ -6,6 +6,29 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Container from '@mui/material/Container';
 
+const QUESTIONS = [
+    {
+        id: 1,
+        title: 'I am an accordion',
+        content: ' Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat. Aliquam eget maximus est, id dignissim quam.'
+    },
+    {
+        id: 2,
+        title: 'I am an accordion',
+        content: ' Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat. Aliquam eget maximus est, id dignissim quam.'
+    },
+    {
+        id: 3,
+        title: 'I am an accordion',
+        content: ' Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat. Aliquam eget maximus est, id dignissim quam.'
+    },
+    {
+        id: 4,
+        title: 'I am an accordion',
+        content: ' Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat. Aliquam eget maximus est, id dignissim quam.'
+    }
+]
+
 export const Faq = () => {
   const [expanded, setExpanded] = React.useState(false);
 
@@ -15,82 +38,36 @@ export const Faq = () => {
 
   return (
     <div>
-        <Typography variant="h2" sx={{ color: 'primary.main', mb: 4 }}>
-            What Our Customers Are Saying
+        <Typography 
+            variant="h3" 
+            sx={{ 
+                color: 'primary.main', 
+                py: 10, 
+                textAlign: 'center',
+                letterSpacing: '4px',
+                textTransform: 'uppercase',
+                fontSize: '30px' 
+            }}
+        >
+            Common questions
         </Typography>
-        <Container maxWidth="sm">
-        <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-            <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-            >
-            <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                General settings
-            </Typography>
-            <Typography sx={{ color: 'text.secondary' }}>I am an accordion</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-            <Typography>
-                Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat.
-                Aliquam eget maximus est, id dignissim quam.
-            </Typography>
-            </AccordionDetails>
-        </Accordion>
-        <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-            <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel2bh-content"
-            id="panel2bh-header"
-            >
-            <Typography sx={{ width: '33%', flexShrink: 0 }}>Users</Typography>
-            <Typography sx={{ color: 'text.secondary' }}>
-                You are currently not an owner
-            </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-            <Typography>
-                Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus,
-                varius pulvinar diam eros in elit. Pellentesque convallis laoreet
-                laoreet.
-            </Typography>
-            </AccordionDetails>
-        </Accordion>
-        <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
-            <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel3bh-content"
-            id="panel3bh-header"
-            >
-            <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                Advanced settings
-            </Typography>
-            <Typography sx={{ color: 'text.secondary' }}>
-                Filtering has been entirely disabled for whole web server
-            </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-            <Typography>
-                Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer sit
-                amet egestas eros, vitae egestas augue. Duis vel est augue.
-            </Typography>
-            </AccordionDetails>
-        </Accordion>
-        <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
-            <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel4bh-content"
-            id="panel4bh-header"
-            >
-            <Typography sx={{ width: '33%', flexShrink: 0 }}>Personal data</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-            <Typography>
-                Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer sit
-                amet egestas eros, vitae egestas augue. Duis vel est augue.
-            </Typography>
-            </AccordionDetails>
-        </Accordion>
+        <Container maxWidth="sm" sx={{ pb: 10 }}>
+            { QUESTIONS?.map(question => (
+                 <Accordion expanded={expanded === question?.id } onChange={handleChange(question?.id)} key={question?.id}>
+                    <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls={`${question?.id}bh-content`}
+                    id={`${question?.id}bh-content`}
+                    >
+                    <Typography sx={{ color: 'text.secondary' }}>{ question?.title }</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                    <Typography>
+                        { question?.content }
+                    </Typography>
+                    </AccordionDetails>
+                </Accordion>
+            )) }
       </Container>
     </div>
   );

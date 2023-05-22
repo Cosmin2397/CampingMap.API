@@ -7,7 +7,7 @@ import { Message } from './common/Message'
 import Rating from '@mui/material/Rating';
 
 
-export const AddCampReview = ({ campingId, userId, closeModal }) => {
+export const AddCampReview = ({ campingId, userId, closeModal, refetchCampings }) => {
     const [reviewData, setReviewData] = useState({})
 
     const formattedReviewData = {
@@ -20,13 +20,10 @@ export const AddCampReview = ({ campingId, userId, closeModal }) => {
         'Reviews', 
         formattedReviewData
     )
-
-
+    
     const RequestMessage = () => {
         return (
-         !!responseAddReview && !!reviewData && !loadingAddReview ?   
-           closeModal() 
-           :
+         !responseAddReview && !reviewData && loadingAddReview && 
            (
              <Message 
                showMessage={errorAddReview} 
@@ -36,7 +33,7 @@ export const AddCampReview = ({ campingId, userId, closeModal }) => {
            )
         )
        }
-    console.log(responseAddReview?.status === 200 && !loadingAddReview)
+
     const handleFormChange = (event) => {
         setReviewData(prevState => ({
         ...prevState,
@@ -48,6 +45,13 @@ export const AddCampReview = ({ campingId, userId, closeModal }) => {
         event.preventDefault()
         if(userId && campingId) {
             postRequest()
+        }
+
+        if(!loadingAddReview && !errorAddReview) {
+            closeModal()
+            setTimeout(() => {
+                refetchCampings()
+            }, 1000)
         }
     };
   return (

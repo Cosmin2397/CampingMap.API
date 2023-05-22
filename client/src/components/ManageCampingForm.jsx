@@ -55,7 +55,6 @@ export function ManageCampingForm({ data, type }) {
         navigate('/dashboard')
     }, 3000)
 }
-console.log(responseAdd, responseEdit)
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);

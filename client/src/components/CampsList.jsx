@@ -13,7 +13,7 @@ export const CampsList = ({
   addReviewAllowed
 }) => {
   return (
-    <Grid container rowSpacing={3} columnSpacing={3} sx={{ padding: '25px' }}>
+    <Grid container rowSpacing={3} columnSpacing={3} sx={{ px: 4, py: 8 }}>
         { camps?.map(camp => (
           <Grid item xs={12} md={4}>
             <CampCard 

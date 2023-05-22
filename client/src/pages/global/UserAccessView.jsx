@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react';
-import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -27,40 +26,40 @@ export const UserAccessView = () => {
 
   return (
     <div>
-    <Grid container component="main" sx={{ height: '100vh' }}>
-    <Grid
-        item
-        xs={false}
-        sm={4}
-        md={7}
-        sx={{
-        backgroundImage: 'url(https://source.unsplash.com/xr-y6Ruw7K8)',
-        backgroundRepeat: 'no-repeat',
-        backgroundColor: (t) =>
-            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        }}
-    />
-    <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-    <Tabs
-      value={tabIndex}
-      onChange={handleChange}
-      aria-label="user access tabs"
-      centered
-    >
-        <Tab icon={<LockOutlinedIcon />} label="Login" iconPosition="start"/>
-        <Tab icon={<LockOutlinedIcon />} label="Create account" iconPosition="start"/>
-       
-    </Tabs>
-     <TabPanel value={tabIndex} index={0}>
-        <SignIn isLogin={tabIndex === 0}/>
-    </TabPanel>
-    <TabPanel value={tabIndex} index={1}>
-        <SignUp />
-    </TabPanel>
-    </Grid>
-    </Grid>
-      </div>
+      <Grid container component="main" sx={{ height: '100vh' }}>
+        <Grid
+            item
+            xs={false}
+            sm={4}
+            md={7}
+            sx={{
+            backgroundImage: 'url(https://source.unsplash.com/xr-y6Ruw7K8)',
+            backgroundRepeat: 'no-repeat',
+            backgroundColor: (t) =>
+                t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            }}
+        />
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Tabs
+          value={tabIndex}
+          onChange={handleChange}
+          aria-label="user access tabs"
+          centered
+        >
+            <Tab icon={<LockOutlinedIcon />} label="Login" iconPosition="start"/>
+            <Tab icon={<LockOutlinedIcon />} label="Create account" iconPosition="start"/>
+          
+        </Tabs>
+        <TabPanel value={tabIndex} index={0}>
+            <SignIn isLogin={tabIndex === 0}/>
+        </TabPanel>
+        <TabPanel value={tabIndex} index={1}>
+            <SignUp />
+        </TabPanel>
+        </Grid>
+      </Grid>
+    </div>
   );
 }

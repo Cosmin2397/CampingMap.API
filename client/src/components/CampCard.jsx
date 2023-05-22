@@ -20,25 +20,22 @@ export const CampCard = ({
   loadingCamps, 
   handleOpenReviewModal,
   authUser,
-  loadingAuthUser,
   handleOpenCampDrawer,
   addReviewAllowed
 }) => {
 
   return (
    <div>
-    { loadingCamps || loadingAuthUser ?
+    { loadingCamps ?
     <CardSkeleton /> :
     (
       <>
       <Card>
-
           <CardHeader
             avatar={
-              <Avatar src="/static/images/avatar/2.jpg" alt={authUser?.userName} />
+              <Avatar src="/static/images/avatar/2.jpg" alt={camp?.userName} />
             }
-            title={authUser?.userName}
-            subheader={<Chip label={authUser?.roles?.[0]} color="primary" variant="outlined" size="small" />}
+            title={<Typography variant="h6">{ camp?.userName }</Typography>}
           />
           <CardMedia
             component="img"

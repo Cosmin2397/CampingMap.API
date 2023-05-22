@@ -20,18 +20,13 @@ import { useNavigate } from 'react-router-dom';
 import "../../style/Header.scss";
 
 const MAIN_PAGES = [
+  { text: "Home", url: "/" },
   { text: "Campings", url: "/campings" }, 
-  { text: "Dashboard", url: "/dashboard" }
-];
-
-const ADMIN_PAGES = [
-  { text: "Home", url: "/" }, 
-  { text: "Dashboard", url: "/dashboard" }
 ];
 
 const SETTINGS = [
-  { text: "Profile", url: "/admin/profile" }, 
-  { text: "Camps", url: "/admin/camps" },
+  { text: "Dashboard", url: "/dashboard" }, 
+  { text: "Add camping", url: "/dashboard/add-camping" },
   { text: "Logout", url: "#" }
 ];
 
@@ -40,8 +35,6 @@ export function Header({ user, type, open, setOpen, loadingUser }) {
   const [anchorElUser, setAnchorElUser] = useState(null);
 
   const navigate = useNavigate()
-
-  const getHeaderMenu = type === "main" ? MAIN_PAGES : ADMIN_PAGES
 
   const {getRequest: logoutRequest, response: logoutResponse} = useGetQuery('Auth/logout')
 
@@ -66,14 +59,11 @@ export function Header({ user, type, open, setOpen, loadingUser }) {
   };
 
   const handleLogout = (page) => {
-    if(page.text === 'Logout') {
-      logoutRequest()
-    }
+    logoutRequest()
     navigate(0)
-
     setTimeout(() => {
       navigate('/sign-in')
-  }, 3000)
+    }, 3000)
   }
 
   if(loadingUser) {
@@ -138,7 +128,7 @@ export function Header({ user, type, open, setOpen, loadingUser }) {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {getHeaderMenu.map((page) => (
+              {MAIN_PAGES.map((page) => (
                 <MenuItem key={page.text} onClick={handleCloseNavMenu}>
                     <NavLink to={page.url}>{page.text}</NavLink  >
                 </MenuItem>
@@ -169,7 +159,7 @@ export function Header({ user, type, open, setOpen, loadingUser }) {
          
           
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-          {getHeaderMenu.map((page) => (
+          {MAIN_PAGES.map((page) => (
             <Button
               key={page.text}
               onClick={handleCloseNavMenu}
@@ -186,7 +176,7 @@ export function Header({ user, type, open, setOpen, loadingUser }) {
             { (user && user?.isAuthenticated) && !loadingUser ? 
               (
                 <>
-                  <Tooltip title="Open settings">
+                  <Tooltip title="Open user menu">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                       <Avatar alt={user?.userName} src="/static/images/avatar/2.jpg" />
                     </IconButton>
@@ -209,7 +199,10 @@ export function Header({ user, type, open, setOpen, loadingUser }) {
                   >
                     {SETTINGS.map((setting) => (
                       <MenuItem key={setting.text} onClick={handleCloseUserMenu} className="user-menu">
-                        <NavLink to={setting.url} onClick={() => handleLogout(setting)}>{setting.text}</NavLink>
+                        { setting.text === 'Logout' ? 
+                          <NavLink to={setting.url} onClick={handleLogout}>{setting.text}</NavLink> :
+                          <NavLink to={setting.url}>{setting.text}</NavLink>  
+                        }
                       </MenuItem>
                     ))}
                   </Menu>

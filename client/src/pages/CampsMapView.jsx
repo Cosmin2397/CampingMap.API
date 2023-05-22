@@ -26,6 +26,7 @@ export const CampsMapView = () => {
 
   const handlSwitchView = () => {
     setShowList(!showList)
+    setSelectedCamp(null)
   }
 
   const handleOpenReviewModal = (camp) => {
@@ -98,7 +99,7 @@ export const CampsMapView = () => {
       </Fab>
       <CustomModal 
         title={`Add review for ${selectedCamp?.name} camp`}
-        content={<AddCampReview campingId={selectedCamp?.id} userId={authUser?.userId} closeModal={() => handleCloseReviewModal()}/>}
+        content={<AddCampReview campingId={selectedCamp?.id} userId={authUser?.userId} closeModal={() => handleCloseReviewModal()} refetchCampings={getRequest} />}
         open={openModal}
         handleClose={handleCloseReviewModal}
       />

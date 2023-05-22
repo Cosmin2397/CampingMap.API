@@ -4,12 +4,18 @@ import { HeroSection } from '../components/home/HeroSection'
 import { Testimonials } from '../components/home/Testimonials'
 import { Faq } from '../components/home/Faq'
 
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "../style/Carousel.scss"
+
 export const Home = () => {
   return (
-    <Container maxWidth="lg">
+    <>      
       <HeroSection />
-      <Testimonials />
-      <Faq />
-    </Container>
+      <Container maxWidth="lg">
+        <Testimonials />
+        <Faq />
+      </Container>
+    </>
   )
 }
