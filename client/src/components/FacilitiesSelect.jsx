@@ -20,11 +20,15 @@ const MenuProps = {
 };
 
 const facilities = [
-  'Facility 1',
-  'Facility 2',
-  'Facility 3',
-  'Facility 4',
-  'Facility 5',
+  'Wi-Fi',
+  'Mountain view',
+  'River view',
+  'Grill',
+  'Dining area',
+  'Equipped kitchen',
+  'Equipped bathroom',
+  'Pets allowed',
+
 ];
 
 function getStyles(facility, campingFacility, theme) {

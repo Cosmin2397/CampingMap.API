@@ -21,9 +21,12 @@ const steps = ['General info', 'Location', 'Facilities'];
 export function ManageCampingForm({ data, type }) {
   const [activeStep, setActiveStep] = useState(0)
   const [formData, setFormData] = useState(data)
+
+  const schedule = data?.openingHours?.split('-')
+
   const [openingHours, setOpeningHours] = useState({ 
-    start: data?.openingHours?.split('-')[0], 
-    end: data?.openingHours?.split('-')[1]
+    start: schedule && dayjs(schedule?.[0]), 
+    end: schedule && dayjs(schedule?.[1]),
   })
   const [location, setLocation] = useState(data?.location)
   const [campingFacilities, setCampingFacilities] = useState(data?.facilities)
@@ -33,7 +36,6 @@ export function ManageCampingForm({ data, type }) {
 
   const updatedCampingData = {
     ...formData,
-    // openingHours: `${dayjs(openingHours?.start).locale('en').format('h:mm A')} - ${dayjs(openingHours?.end).locale('en').format('h:mm A')}`,
     openingHours: `${openingHours?.start}-${openingHours?.end}`,
     location,
     facilities: String(campingFacilities)
@@ -172,7 +174,7 @@ export function ManageCampingForm({ data, type }) {
               label="Opening hour start"
               name="start"
               // defaultValue={dayjs(openingHours?.start).locale('en').format('h:mm A')}
-              value={dayjs(openingHours?.start)}
+              defaultValue={openingHours?.start}
               closeOnSelect={false}
               onAccept={handleStartHour}
           />   
@@ -180,7 +182,7 @@ export function ManageCampingForm({ data, type }) {
             label="Opening hour end"
             name="end"
             // defaultValue={dayjs(openingHours?.end).locale('en').format('h:mm A')}
-            value={dayjs(openingHours?.end)}
+            defaultValue={openingHours?.end}
             closeOnSelect={false}
             onAccept={handleEndHour}
           />

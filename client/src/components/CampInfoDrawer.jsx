@@ -45,7 +45,7 @@ export const CampInfoDrawer = ({ selectedCamp, drawerOpen, handleDrawerClose }) 
 
         <Divider textAlign="left" sx={{ my: 1 }}>Facilities</Divider>
         { selectedCamp?.facilities?.split(',')?.map(facility => (
-            <Chip label={facility} sx={{ mr: 1 }} /> 
+            <Chip label={facility} sx={{ mr: 1, mb: 1 }} key={facility}/> 
         )) }
     
         <Divider textAlign="left" sx={{ mt: 2 }}>Description</Divider>
