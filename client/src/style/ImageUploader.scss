@@ -1,0 +1,47 @@
+@use 'variables';
+
+.images-uploader {
+    .upload-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        label {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            cursor: pointer;
+
+            svg {
+                font-size: 40px;
+                color: variables.$primary-color;
+            }
+        }
+        input {
+            display: none;
+        }
+        .upload-btn {
+            display: flex;
+            gap: 5px;
+        }
+    }
+    .images-preview {
+        padding-top: 20px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        img {
+            width: 100px;
+            height: 100px;
+        }
+        .delete-icon {
+            color: variables.$error;
+            cursor: pointer;
+            position: absolute;
+            margin-left: -24px;
+            background-color: variables.$dark-overlay;
+        }
+    }
+    .error-message {
+        color: variables.$error;
+    }
+}

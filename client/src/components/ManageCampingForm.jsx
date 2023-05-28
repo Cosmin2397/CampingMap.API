@@ -4,6 +4,7 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 import { TextField } from '@mui/material';
 import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -14,6 +15,7 @@ import { FacilitiesSelect } from './FacilitiesSelect';
 import { usePostQuery } from '../hooks/usePostQuery'
 import { usePutQuery } from '../hooks/usePutQuery'
 import { Message } from './common/Message'
+import { ImageUploader } from './ImageUploader';
 import { useNavigate, useParams } from 'react-router-dom'
 
 const steps = ['General info', 'Location', 'Facilities'];
@@ -173,7 +175,6 @@ export function ManageCampingForm({ data, type }) {
           <MobileTimePicker 
               label="Opening hour start"
               name="start"
-              // defaultValue={dayjs(openingHours?.start).locale('en').format('h:mm A')}
               defaultValue={openingHours?.start}
               closeOnSelect={false}
               onAccept={handleStartHour}
@@ -181,7 +182,6 @@ export function ManageCampingForm({ data, type }) {
           <MobileTimePicker 
             label="Opening hour end"
             name="end"
-            // defaultValue={dayjs(openingHours?.end).locale('en').format('h:mm A')}
             defaultValue={openingHours?.end}
             closeOnSelect={false}
             onAccept={handleEndHour}
@@ -199,10 +199,17 @@ export function ManageCampingForm({ data, type }) {
 
   const FormThirdStep = () => {
     return (
-      <FacilitiesSelect 
-        campingFacilities={campingFacilities}
-        setCampingFacilities={setCampingFacilities} 
-      />
+      <Grid container spacing={8}>
+        <Grid item md={6} xs={12}>
+          <FacilitiesSelect 
+            campingFacilities={campingFacilities}
+            setCampingFacilities={setCampingFacilities} 
+          />
+        </Grid>
+        <Grid item md={6} xs={12}>
+          <ImageUploader />
+        </Grid>
+      </Grid>
     )
   }
 

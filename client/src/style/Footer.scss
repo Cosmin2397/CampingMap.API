@@ -1,0 +1,14 @@
+footer {
+    .logo {
+        img {
+            filter: invert(100%);
+            -webkit-filter: invert(100%);
+            max-width: 30px;
+        }
+    }
+   p.MuiTypography-root {
+    svg {
+        font-size: 20px;
+    }
+   }
+}
