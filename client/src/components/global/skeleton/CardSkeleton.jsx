@@ -1,10 +1,11 @@
 import React from 'react'
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
+import Card from '@mui/material/Card';
 
 export const CardSkeleton = () => {
   return (
-    <div>
+    <Card sx={{ p: 4 }}>
       <Skeleton
         animation="wave"
         width="100%"
@@ -21,10 +22,10 @@ export const CardSkeleton = () => {
         <Skeleton animation="wave" height={40} style={{ mb: 6 }} />
         <Skeleton animation="wave" height={40}/>
         <Skeleton animation="wave" height={40} />
-        <Stack direction="row" justifyContent="flex-end" spacing={4} sx={{ mb: 2 }}>
+        <Stack direction="row" justifyContent="flex-end" spacing={4}>
           <Skeleton animation="wave" width={80} height={50} />
           <Skeleton animation="wave" width={80} height={50} />
         </Stack>
-    </div>
+    </Card>
   )
 }

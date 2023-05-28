@@ -8,12 +8,10 @@ import {
   TableRow,
   Paper,
   IconButton,
-  Drawer,
   Button,
 } from "@mui/material"
 import { Delete as DeleteIcon, Edit as EditIcon, Add as AddIcon } from "@mui/icons-material"
 import Stack from '@mui/material/Stack';
-import { ManageCampingForm } from '../ManageCampingForm'
 import Link from '@mui/material/Link';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
@@ -26,21 +24,12 @@ import '../../style/Common.scss';
 export const CustomTable = ({ 
   columns, 
   data, 
-  onAdd, 
-  onEdit, 
   onDelete, 
-  formData, 
   setFormData, 
   selectedRow, 
   setSelectedRow,
-  openingHours,
-  setOpeningHours,
-  location,
-  setLocation,
-  campingFacilities,
-  setCampingFacilities
+
 }) => {
-  const [drawerOpen, setDrawerOpen] = useState(null)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
 
 
@@ -54,19 +43,6 @@ export const CustomTable = ({
     setOpenDeleteModal(false)
   };
 
-  const handleDrawerClose = () => {
-    setDrawerOpen(null);
-  };
-
-  const handleFormChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
-
-  const handleFormSubmit = () => {
-    onEdit(formData);
-    handleDrawerClose();
-  };
 
   const handleSelectDelete = (row) => {
     setSelectedRow(row);
@@ -139,34 +115,6 @@ export const CustomTable = ({
           </Stack>
         </Box>
       </Modal>
-      <Drawer 
-        anchor="bottom" 
-        open={!!drawerOpen} 
-        onClose={handleDrawerClose}
-      >
-        <form>
-          {formData && (
-            <Stack direction="column" spacing={2} sx={{ padding: '35px' }}>
-              <ManageCampingForm 
-                columns={columns} 
-                drawerOpen={drawerOpen}
-                formData={formData}
-                openingHours={openingHours}
-                setOpeningHours={setOpeningHours}
-                location={location}
-                setLocation={setLocation}
-                campingFacilities={campingFacilities}
-                setCampingFacilities={setCampingFacilities}
-                handleFormChange={handleFormChange}
-              />
-              <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{ paddingTop: '20px' }}>
-                <Button color="primary" variant="outlined" onClick={handleDrawerClose}>Cancel</Button>
-                <Button color="primary" variant="contained" onClick={handleFormSubmit}>Save</Button>
-              </Stack>
-            </Stack>
-          )}
-        </form>
-      </Drawer>
     </>
   );
 };
