@@ -3,11 +3,13 @@ import { ManageCampingForm } from '../../components/ManageCampingForm';
 import { useParams, Navigate } from 'react-router-dom';
 import { useGetQuery } from '../../hooks/useGetQuery'
 import { Message } from '../../components/common/Message'
+import Skeleton from '@mui/material/Skeleton';
+import Typography from '@mui/material/Typography';
 
 
 export const EditCamping = () => {
     const { id } = useParams()
-    const { getRequest, data, loading, error } = useGetQuery(`Campings/${id}`)
+    const { getRequest, data, loading: loadingCamping, error } = useGetQuery(`Campings/${id}`)
 
     useEffect(() => {
       getRequest()
@@ -27,15 +29,13 @@ export const EditCamping = () => {
          message="Can't load camping information!" 
        />
       ) }
-      { loading ? <h1>Loading...</h1> :
-        (
-          <>
-            <h1>Edit camping: {data?.name}</h1>
-            <ManageCampingForm data={data} type='edit' />
-          </>
-        )
-      }
-      
+
+      <>
+        <Typography variant="h4" display="flex" gap={2} alignItems="center" sx={{ mb: 4 }}>
+          Edit camping: { loadingCamping ? <Skeleton animation="wave" width={250} height={50} /> : data?.name }
+        </Typography>
+        <ManageCampingForm data={data} type='edit' loadingCamping={loadingCamping}/>
+      </>
     </div>
   )
 }

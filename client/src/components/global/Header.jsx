@@ -16,6 +16,8 @@ import { NavLink } from 'react-router-dom';
 import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
 import { useGetQuery } from '../../hooks/useGetQuery'
 import { useNavigate } from 'react-router-dom';
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
 
 import "../../style/Header.scss";
 
@@ -38,11 +40,6 @@ export function Header({ user, type, open, setOpen, loadingUser }) {
 
   const {getRequest: logoutRequest, response: logoutResponse} = useGetQuery('Auth/logout')
 
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -64,10 +61,6 @@ export function Header({ user, type, open, setOpen, loadingUser }) {
     setTimeout(() => {
       navigate('/sign-in')
     }, 3000)
-  }
-
-  if(loadingUser) {
-    return <p>Loading...</p>
   }
 
   return (
@@ -159,6 +152,9 @@ export function Header({ user, type, open, setOpen, loadingUser }) {
         
 
           <Box sx={{ flexGrow: 0 }}>
+            { loadingUser &&
+                <Skeleton variant="circular" width={40} height={40} />
+            }
             { (user && user?.isAuthenticated) && !loadingUser ? 
               (
                 <>
@@ -194,7 +190,7 @@ export function Header({ user, type, open, setOpen, loadingUser }) {
                   </Menu>
                 </>
               )
-              :
+              : !loadingUser ?
               (
                <NavLink to='/sign-in'>
                   <Button variant="outlined" startIcon={<Person2OutlinedIcon />}>
@@ -202,7 +198,7 @@ export function Header({ user, type, open, setOpen, loadingUser }) {
                   </Button>
                </NavLink>
               )
-
+              : ''
             }
           </Box>
         </Toolbar>

@@ -5,7 +5,6 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
-import { CardSkeleton } from './global/CardSkeleton';
 import CardActions from '@mui/material/CardActions';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
@@ -17,7 +16,6 @@ import Stack from '@mui/material/Stack'
 
 export const CampCard = ({ 
   camp, 
-  loadingCamps, 
   handleOpenReviewModal,
   authUser,
   handleOpenCampDrawer,
@@ -25,11 +23,7 @@ export const CampCard = ({
 }) => {
 
   return (
-   <div>
-    { loadingCamps ?
-    <CardSkeleton /> :
-    (
-      <>
+    <>
       <Card>
           <CardHeader
             avatar={
@@ -69,9 +63,6 @@ export const CampCard = ({
             <Button size="small" variant="contained" onClick={() => handleOpenCampDrawer(camp)}>View more</Button>
           </CardActions>
       </Card>
-      </>
-    )
-  }
-   </div>
+    </>
   );
 }

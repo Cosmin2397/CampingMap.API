@@ -32,6 +32,7 @@ export const HeroSection = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     fade: true,
+    arrows: false,
     
   }
   return (

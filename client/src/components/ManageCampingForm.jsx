@@ -17,10 +17,11 @@ import { usePutQuery } from '../hooks/usePutQuery'
 import { Message } from './common/Message'
 import { ImageUploader } from './ImageUploader';
 import { useNavigate, useParams } from 'react-router-dom'
+import { FormSkeleton } from './global/skeleton/FormSkeleton';
 
 const steps = ['General info', 'Location', 'Facilities'];
 
-export function ManageCampingForm({ data, type }) {
+export function ManageCampingForm({ data, type, loadingCamping }) {
   const [activeStep, setActiveStep] = useState(0)
   const [formData, setFormData] = useState(data)
 
@@ -137,58 +138,63 @@ export function ManageCampingForm({ data, type }) {
 
   const FormFirstStep = () => {
     return (
-     <>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, paddingBottom: '20px' }}>
-      <TextField
-          key="name"
-          label="Name"
-          name="name"
-          defaultValue={formData?.name}
-          value={formData?.name}
-          onChange={handleFormChange}
-        />
+      loadingCamping ? 
+      <FormSkeleton />
+       :
+      (
+        <>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, paddingBottom: '20px' }}>
         <TextField
-          key="description"
-          label="Description"
-          name="description"
-          value={formData?.description}
-          onChange={handleFormChange}
-        />
-        <TextField
-          key="phoneNumber"
-          label="Phone"
-          name="phoneNumber"
-          value={formData?.phoneNumber}
-          onChange={handleFormChange}
-        />
-        <TextField
-          key="price"
-          label="Price"
-          name="price"
-          type="number"
-          value={formData?.price ?? data?.price}
-          onChange={handleFormChange}
-        />
-      </Box>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, paddingBottom: '20px' }}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>  
-          <MobileTimePicker 
-              label="Opening hour start"
-              name="start"
-              defaultValue={openingHours?.start}
-              closeOnSelect={false}
-              onAccept={handleStartHour}
-          />   
-          <MobileTimePicker 
-            label="Opening hour end"
-            name="end"
-            defaultValue={openingHours?.end}
-            closeOnSelect={false}
-            onAccept={handleEndHour}
+            key="name"
+            label="Name"
+            name="name"
+            defaultValue={formData?.name}
+            value={formData?.name}
+            onChange={handleFormChange}
           />
-        </LocalizationProvider>
-      </Box>
-     </>
+          <TextField
+            key="description"
+            label="Description"
+            name="description"
+            value={formData?.description}
+            onChange={handleFormChange}
+          />
+          <TextField
+            key="phoneNumber"
+            label="Phone"
+            name="phoneNumber"
+            value={formData?.phoneNumber}
+            onChange={handleFormChange}
+          />
+          <TextField
+            key="price"
+            label="Price"
+            name="price"
+            type="number"
+            value={formData?.price ?? data?.price}
+            onChange={handleFormChange}
+          />
+        </Box>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, paddingBottom: '20px' }}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>  
+            <MobileTimePicker 
+                label="Opening hour start"
+                name="start"
+                defaultValue={openingHours?.start}
+                closeOnSelect={false}
+                onAccept={handleStartHour}
+            />   
+            <MobileTimePicker 
+              label="Opening hour end"
+              name="end"
+              defaultValue={openingHours?.end}
+              closeOnSelect={false}
+              onAccept={handleEndHour}
+            />
+          </LocalizationProvider>
+        </Box>
+       </>
+      )
     )}
   
   const FormSecondStep = () => {
