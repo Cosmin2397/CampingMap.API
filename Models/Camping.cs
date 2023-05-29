@@ -1,6 +1,7 @@
 ﻿using CampingMap.API.Data;
 using Microsoft.AspNetCore.Components.Routing;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
 
 namespace CampingMap.API.Models
@@ -27,6 +28,7 @@ namespace CampingMap.API.Models
 
         public IEnumerable<Review>? Reviews { get; set; }
 
+        [NotMapped]
         public Image? Photo { get; set; }
 
         public CampingType Type { get; set; }
