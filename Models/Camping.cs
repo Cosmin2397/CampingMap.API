@@ -26,7 +26,7 @@ namespace CampingMap.API.Models
 
         public IEnumerable<Review>? Reviews { get; set; }
 
-        public IEnumerable<Photo>? Photos { get; set; }
+        public Photo? Photos { get; set; }
 
         public CampingType Type { get; set; }
 

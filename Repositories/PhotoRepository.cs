@@ -1,5 +1,6 @@
 ﻿using CampingMap.API.Data;
 using CampingMap.API.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,20 +15,31 @@ namespace CampingMap.API.Repositories
             _context = context;
         }
 
-        public async Task<Photo> AddPhoto(Photo photo)
+        public async Task<Photo> AddPhoto(Guid campingID, IFormFile imageFile)
         {
-            if (photo == null)
+            var camping = await _context.Campings.FindAsync(campingID);
+            Photo photo = new Photo();
+            if (imageFile == null)
             {
                 return null;
             }
             else
             {
+                using (var stream = new MemoryStream())
+                {
+                    await imageFile.CopyToAsync(stream);
+                    photo.Id = new Guid();
+                    photo.Name = camping.Name;
+                    photo.CampingId = campingID;
+                    photo.Image = stream.ToArray();
+                }
+
                 await _context.Photos.AddAsync(photo);
                 await _context.SaveChangesAsync();
                 return photo;
             }
         }
-
+       
         public async Task<Photo> DeletePhoto(Guid id)
         {
             var photo = await _context.Photos.FindAsync(id);
@@ -42,17 +54,17 @@ namespace CampingMap.API.Repositories
             return photo;
         }
 
-        public async Task<IEnumerable<Photo>> GetCampingPhotos(Guid id)
+        public async Task<Photo> GetCampingPhoto(Guid id)
         {
             var photos = await _context.Photos.ToListAsync();
-            var campingPhotos= photos.Where(photo => photo.CampingId == id);
+            var campingPhoto = photos.FirstOrDefault(photo => photo.CampingId == id);
 
-            if (campingPhotos == null)
+            if (campingPhoto == null)
             {
                 return null;
             }
 
-            return campingPhotos;
+            return campingPhoto;
         }
 
         public async Task<Photo> GetPhotoById(Guid id)
@@ -65,40 +77,6 @@ namespace CampingMap.API.Repositories
             }
 
             return photo;
-        }
-
-        public async Task<IEnumerable<Photo>> GetPhotos()
-        {
-            var photos = await _context.Photos.ToListAsync();
-            return photos;
-        }
-
-        public async Task<Photo> UpdatePhoto(Guid id, Photo photo)
-        {
-            _context.Entry(photo).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PhotoExists(id))
-                {
-                    return await AddPhoto(photo);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return photo;
-        }
-
-        private bool PhotoExists(Guid id)
-        {
-            return _context.Photos.Any(e => e.Id == id);
         }
     }
 }

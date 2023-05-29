@@ -22,24 +22,11 @@ namespace CampingMap.API.Controllers
             _photoRepository = photoRepository;
         }
 
-        // GET: api/Photos
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Photo>>> GetPhotos()
-        {
-            var photos = await _photoRepository.GetPhotos();
-            if (photos == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(photos);
-        }
-
         // GET: api/Photos/5
         [HttpGet("camping/{id}")]
-        public async Task<ActionResult<IEnumerable<Photo>>> GetCampingPhotos(Guid id)
+        public async Task<ActionResult<Photo>> GetCampingPhoto(Guid id)
         {
-            var photos = await _photoRepository.GetCampingPhotos(id);
+            var photos = await _photoRepository.GetCampingPhoto(id);
             return Ok(photos);
         }
 
@@ -57,22 +44,13 @@ namespace CampingMap.API.Controllers
             return photo;
         }
 
-
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Photo>> PutPhoto(Guid id, Photo photo)
-        {
-            var updatedPhoto = await _photoRepository.UpdatePhoto(id, photo);
-
-            return Ok(updatedPhoto);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Photo>> PostPhoto(Photo photo)
+        [HttpPost("{campingId}")]
+        public async Task<ActionResult<Photo>> PostPhoto(Guid campingId, IFormFile imageFile)
         {
             try
             {
 
-                await _photoRepository.AddPhoto(photo);
+                var photo = await _photoRepository.AddPhoto(campingId, imageFile);
                 if (photo == null)
                 {
                     return NotFound();

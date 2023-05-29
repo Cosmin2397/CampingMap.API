@@ -21,5 +21,7 @@ namespace CampingMap.API.Repositories
         Task<Camping> UpdateCamping(Guid id, Camping camping);
 
         Task<Camping> DeleteCamping(Guid id);
+
+
     }
 }
