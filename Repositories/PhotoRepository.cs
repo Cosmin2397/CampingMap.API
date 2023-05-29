@@ -55,22 +55,25 @@ namespace CampingMap.API.Repositories
             return photo;
         }
 
-        public async Task<Image> GetCampingPhoto(Guid id)
+        public async Task<List<Image>> GetCampingPhotos(Guid id)
         {
             var photos = await _context.Photos.ToListAsync();
-            var campingPhoto = photos.FirstOrDefault(photo => photo.CampingId == id);
-
-            if (campingPhoto == null)
+            var campingPhotos = photos.Where(photo => photo.CampingId == id);
+            var images = new List<Image>();
+            if (campingPhotos == null)
             {
                 return null;
             }
             else
             {
-                using (MemoryStream memstr = new MemoryStream(campingPhoto.Image))
-    {
-                    Image img = Image.FromStream(memstr);
-                    return img;
-    }
+                foreach (var photo in campingPhotos)
+                {
+                    using (MemoryStream memstr = new MemoryStream(photo.Image))
+                    {
+                        images.Add( Image.FromStream(memstr));
+                    }
+                }
+                return images;
             }
         }
     }
