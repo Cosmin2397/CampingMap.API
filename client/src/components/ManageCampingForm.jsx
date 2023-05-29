@@ -4,6 +4,7 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 import { TextField } from '@mui/material';
 import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -14,16 +15,21 @@ import { FacilitiesSelect } from './FacilitiesSelect';
 import { usePostQuery } from '../hooks/usePostQuery'
 import { usePutQuery } from '../hooks/usePutQuery'
 import { Message } from './common/Message'
+import { ImageUploader } from './ImageUploader';
 import { useNavigate, useParams } from 'react-router-dom'
+import { FormSkeleton } from './global/skeleton/FormSkeleton';
 
 const steps = ['General info', 'Location', 'Facilities'];
 
-export function ManageCampingForm({ data, type }) {
+export function ManageCampingForm({ data, type, loadingCamping }) {
   const [activeStep, setActiveStep] = useState(0)
   const [formData, setFormData] = useState(data)
+
+  const schedule = data?.openingHours?.split('-')
+
   const [openingHours, setOpeningHours] = useState({ 
-    start: data?.openingHours?.split('-')[0], 
-    end: data?.openingHours?.split('-')[1]
+    start: schedule && dayjs(schedule?.[0]), 
+    end: schedule && dayjs(schedule?.[1]),
   })
   const [location, setLocation] = useState(data?.location)
   const [campingFacilities, setCampingFacilities] = useState(data?.facilities)
@@ -33,7 +39,6 @@ export function ManageCampingForm({ data, type }) {
 
   const updatedCampingData = {
     ...formData,
-    // openingHours: `${dayjs(openingHours?.start).locale('en').format('h:mm A')} - ${dayjs(openingHours?.end).locale('en').format('h:mm A')}`,
     openingHours: `${openingHours?.start}-${openingHours?.end}`,
     location,
     facilities: String(campingFacilities)
@@ -133,60 +138,63 @@ export function ManageCampingForm({ data, type }) {
 
   const FormFirstStep = () => {
     return (
-     <>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, paddingBottom: '20px' }}>
-      <TextField
-          key="name"
-          label="Name"
-          name="name"
-          defaultValue={formData?.name}
-          value={formData?.name}
-          onChange={handleFormChange}
-        />
+      loadingCamping ? 
+      <FormSkeleton />
+       :
+      (
+        <>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, paddingBottom: '20px' }}>
         <TextField
-          key="description"
-          label="Description"
-          name="description"
-          value={formData?.description}
-          onChange={handleFormChange}
-        />
-        <TextField
-          key="phoneNumber"
-          label="Phone"
-          name="phoneNumber"
-          value={formData?.phoneNumber}
-          onChange={handleFormChange}
-        />
-        <TextField
-          key="price"
-          label="Price"
-          name="price"
-          type="number"
-          value={formData?.price ?? data?.price}
-          onChange={handleFormChange}
-        />
-      </Box>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, paddingBottom: '20px' }}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>  
-          <MobileTimePicker 
-              label="Opening hour start"
-              name="start"
-              // defaultValue={dayjs(openingHours?.start).locale('en').format('h:mm A')}
-              value={dayjs(openingHours?.start)}
-              closeOnSelect={false}
-              onAccept={handleStartHour}
-          />   
-          <MobileTimePicker 
-            label="Opening hour end"
-            name="end"
-            // defaultValue={dayjs(openingHours?.end).locale('en').format('h:mm A')}
-            value={dayjs(openingHours?.end)}
-            closeOnSelect={false}
-            onAccept={handleEndHour}
+            key="name"
+            label="Name"
+            name="name"
+            defaultValue={formData?.name}
+            value={formData?.name}
+            onChange={handleFormChange}
           />
-        </LocalizationProvider>
-      </Box>
-     </>
+          <TextField
+            key="description"
+            label="Description"
+            name="description"
+            value={formData?.description}
+            onChange={handleFormChange}
+          />
+          <TextField
+            key="phoneNumber"
+            label="Phone"
+            name="phoneNumber"
+            value={formData?.phoneNumber}
+            onChange={handleFormChange}
+          />
+          <TextField
+            key="price"
+            label="Price"
+            name="price"
+            type="number"
+            value={formData?.price ?? data?.price}
+            onChange={handleFormChange}
+          />
+        </Box>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, paddingBottom: '20px' }}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>  
+            <MobileTimePicker 
+                label="Opening hour start"
+                name="start"
+                defaultValue={openingHours?.start}
+                closeOnSelect={false}
+                onAccept={handleStartHour}
+            />   
+            <MobileTimePicker 
+              label="Opening hour end"
+              name="end"
+              defaultValue={openingHours?.end}
+              closeOnSelect={false}
+              onAccept={handleEndHour}
+            />
+          </LocalizationProvider>
+        </Box>
+       </>
+      )
     )}
   
   const FormSecondStep = () => {
@@ -197,10 +205,17 @@ export function ManageCampingForm({ data, type }) {
 
   const FormThirdStep = () => {
     return (
-      <FacilitiesSelect 
-        campingFacilities={campingFacilities}
-        setCampingFacilities={setCampingFacilities} 
-      />
+      <Grid container spacing={8}>
+        <Grid item md={6} xs={12}>
+          <FacilitiesSelect 
+            campingFacilities={campingFacilities}
+            setCampingFacilities={setCampingFacilities} 
+          />
+        </Grid>
+        <Grid item md={6} xs={12}>
+          <ImageUploader />
+        </Grid>
+      </Grid>
     )
   }
 

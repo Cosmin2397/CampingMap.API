@@ -16,6 +16,8 @@ import { NavLink } from 'react-router-dom';
 import Person2OutlinedIcon from '@mui/icons-material/Person2Outlined';
 import { useGetQuery } from '../../hooks/useGetQuery'
 import { useNavigate } from 'react-router-dom';
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
 
 import "../../style/Header.scss";
 
@@ -37,11 +39,6 @@ export function Header({ user, type, open, setOpen, loadingUser }) {
   const navigate = useNavigate()
 
   const {getRequest: logoutRequest, response: logoutResponse} = useGetQuery('Auth/logout')
-
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -66,10 +63,6 @@ export function Header({ user, type, open, setOpen, loadingUser }) {
     }, 3000)
   }
 
-  if(loadingUser) {
-    return <p>Loading...</p>
-  }
-
   return (
     <AppBar position="static" open={open} 
       sx={{
@@ -79,25 +72,11 @@ export function Header({ user, type, open, setOpen, loadingUser }) {
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-            className="logo"
-          >
-            <NavLink to="/">LOGO</NavLink  >
-          </Typography>
+          <div className="logo">
+            <NavLink to="/">
+              <img src="/logo.png" alt="Campings finder logo" />
+            </NavLink  >
+          </div>
             
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -173,6 +152,9 @@ export function Header({ user, type, open, setOpen, loadingUser }) {
         
 
           <Box sx={{ flexGrow: 0 }}>
+            { loadingUser &&
+                <Skeleton variant="circular" width={40} height={40} />
+            }
             { (user && user?.isAuthenticated) && !loadingUser ? 
               (
                 <>
@@ -208,7 +190,7 @@ export function Header({ user, type, open, setOpen, loadingUser }) {
                   </Menu>
                 </>
               )
-              :
+              : !loadingUser ?
               (
                <NavLink to='/sign-in'>
                   <Button variant="outlined" startIcon={<Person2OutlinedIcon />}>
@@ -216,7 +198,7 @@ export function Header({ user, type, open, setOpen, loadingUser }) {
                   </Button>
                </NavLink>
               )
-
+              : ''
             }
           </Box>
         </Toolbar>
