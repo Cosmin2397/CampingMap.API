@@ -1,5 +1,6 @@
 ﻿using CampingMap.API.Data;
 using CampingMap.API.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 
@@ -73,7 +74,7 @@ namespace CampingMap.API.Repositories
             foreach(var camping in campings)
             {
                 camping.Reviews = await _reviewRepository.GetCampingReviews(camping.Id);
-                camping.Photos = await _photoRepository.GetCampingPhoto(camping.Id);
+                camping.Photo = await _photoRepository.GetCampingPhoto(camping.Id);
                 camping.Rating = await _ratingRepository.GetCampingRating(camping.Id);
                 camping.Location = await _locationRepository.GetLocationByCampingId(camping.Id);
             }
@@ -90,7 +91,7 @@ namespace CampingMap.API.Repositories
             foreach (var camping in userCampings)
             {
                 camping.Reviews = await _reviewRepository.GetCampingReviews(camping.Id);
-                camping.Photos = await _photoRepository.GetCampingPhoto(camping.Id);
+                camping.Photo = await _photoRepository.GetCampingPhoto(camping.Id);
                 camping.Rating = await _ratingRepository.GetCampingRating(camping.Id);
                 camping.Location = await _locationRepository.GetLocationByCampingId(camping.Id);
             }

@@ -1,12 +1,11 @@
 ﻿using CampingMap.API.Models;
+using System.Drawing;
 
 namespace CampingMap.API.Repositories
 {
     public interface IPhotoRepository
     {
-        Task<Photo> GetCampingPhoto(Guid id);
-
-        Task<Photo> GetPhotoById(Guid id);
+        Task<Image> GetCampingPhoto(Guid id);
 
         Task<Photo> AddPhoto(Guid campingId, IFormFile imageFile);
 

@@ -3,6 +3,7 @@ using CampingMap.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing;
 
 namespace CampingMap.API.Repositories
 {
@@ -54,7 +55,7 @@ namespace CampingMap.API.Repositories
             return photo;
         }
 
-        public async Task<Photo> GetCampingPhoto(Guid id)
+        public async Task<Image> GetCampingPhoto(Guid id)
         {
             var photos = await _context.Photos.ToListAsync();
             var campingPhoto = photos.FirstOrDefault(photo => photo.CampingId == id);
@@ -63,20 +64,14 @@ namespace CampingMap.API.Repositories
             {
                 return null;
             }
-
-            return campingPhoto;
-        }
-
-        public async Task<Photo> GetPhotoById(Guid id)
-        {
-            var photo = await _context.Photos.FindAsync(id);
-
-            if (photo == null)
+            else
             {
-                return null;
+                using (MemoryStream memstr = new MemoryStream(campingPhoto.Image))
+    {
+                    Image img = Image.FromStream(memstr);
+                    return img;
+    }
             }
-
-            return photo;
         }
     }
 }

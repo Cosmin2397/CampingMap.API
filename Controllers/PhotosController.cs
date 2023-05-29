@@ -30,20 +30,6 @@ namespace CampingMap.API.Controllers
             return Ok(photos);
         }
 
-        // GET: api/Photos/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Photo>> GetPhoto(Guid id)
-        {
-            var photo = await _photoRepository.GetPhotoById(id);
-
-            if (photo == null)
-            {
-                return NotFound();
-            }
-
-            return photo;
-        }
-
         [HttpPost("{campingId}")]
         public async Task<ActionResult<Photo>> PostPhoto(Guid campingId, IFormFile imageFile)
         {
