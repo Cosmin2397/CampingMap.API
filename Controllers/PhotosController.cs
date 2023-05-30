@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CampingMap.API.Data;
 using CampingMap.API.Models;
 using CampingMap.API.Repositories;
+using NuGet.Protocol.Core.Types;
 
 namespace CampingMap.API.Controllers
 {
@@ -22,12 +23,19 @@ namespace CampingMap.API.Controllers
             _photoRepository = photoRepository;
         }
 
-        // GET: api/Photos/5
-        [HttpGet("camping/{id}")]
-        public async Task<ActionResult<List<Photo>>> GetCampingPhoto(Guid id)
+        [HttpGet("camping-photos/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<List<Photo>>> GetCampingPhotos(Guid id)
         {
-            var photos = await _photoRepository.GetCampingPhotos(id);
-            return Ok(photos);
+            var campingPhotos = await _photoRepository.GetCampingPhotos(id);
+
+            if (campingPhotos == null || !campingPhotos.Any())
+            {
+                return NotFound();
+            }
+
+            return campingPhotos;
         }
 
         [HttpPost("{campingId}")]

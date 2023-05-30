@@ -5,7 +5,7 @@ namespace CampingMap.API.Repositories
 {
     public interface IPhotoRepository
     {
-        Task<List<Image>> GetCampingPhotos(Guid id);
+        Task<List<Photo>> GetCampingPhotos(Guid id);
 
         Task<Photo> AddPhoto(Guid campingId, IFormFile imageFile);
 
