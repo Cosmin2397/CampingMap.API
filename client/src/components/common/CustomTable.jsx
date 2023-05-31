@@ -11,6 +11,7 @@ import {
   Button,
 } from "@mui/material"
 import { Delete as DeleteIcon, Edit as EditIcon, Add as AddIcon } from "@mui/icons-material"
+import PermMediaOutlinedIcon from '@mui/icons-material/PermMediaOutlined';
 import Stack from '@mui/material/Stack';
 import Link from '@mui/material/Link';
 import Modal from '@mui/material/Modal';
@@ -91,6 +92,11 @@ export const CustomTable = ({
                   <IconButton onClick={() => handleSelectDelete(row)}>
                     <DeleteIcon />
                   </IconButton>
+                  <Link onClick={() => handleEdit(row)} href={`/dashboard/edit-camping/${selectedRow?.id}?selectedStep=2`} variant="body2">
+                    <IconButton>
+                      <PermMediaOutlinedIcon />
+                    </IconButton>
+                  </Link>
                 </TableCell>
               </TableRow>
             ))}

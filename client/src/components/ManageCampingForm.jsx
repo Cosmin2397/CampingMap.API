@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -16,13 +16,12 @@ import { usePostQuery } from '../hooks/usePostQuery'
 import { usePutQuery } from '../hooks/usePutQuery'
 import { Message } from './common/Message'
 import { ImageUploader } from './ImageUploader';
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { FormSkeleton } from './global/skeleton/FormSkeleton';
 
 const steps = ['General info', 'Location', 'Facilities'];
 
 export function ManageCampingForm({ data, type, loadingCamping }) {
-  const [activeStep, setActiveStep] = useState(0)
   const [formData, setFormData] = useState(data)
 
   const schedule = data?.openingHours?.split('-')
@@ -34,8 +33,19 @@ export function ManageCampingForm({ data, type, loadingCamping }) {
   const [location, setLocation] = useState(data?.location)
   const [campingFacilities, setCampingFacilities] = useState(data?.facilities)
 
+
+  //Search query params function
+  const useQuery = () => {
+    const { search } = useLocation();
+  
+    return useMemo(() => new URLSearchParams(search), [search]);
+  }
   const navigate = useNavigate()
   const { id } = useParams()
+  const query = useQuery()
+  const selectedStep = query.get("selectedStep")
+
+  const [activeStep, setActiveStep] = useState(Number(selectedStep) || 0)
 
   const updatedCampingData = {
     ...formData,
@@ -213,7 +223,12 @@ export function ManageCampingForm({ data, type, loadingCamping }) {
           />
         </Grid>
         <Grid item md={6} xs={12}>
-          <ImageUploader />
+          { type === 'edit' ? 
+            <ImageUploader 
+              campingId={id ?? responseAdd?.id} 
+              campingImages={data?.photos} 
+            /> : '' 
+          }
         </Grid>
       </Grid>
     )

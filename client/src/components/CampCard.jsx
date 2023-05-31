@@ -1,7 +1,6 @@
 import React from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
@@ -11,7 +10,8 @@ import Chip from '@mui/material/Chip';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Rating from '@mui/material/Rating';
 import Divider from '@mui/material/Divider'
-import Stack from '@mui/material/Stack'
+import Stack from '@mui/material/Stack';
+import Slider from 'react-slick';
 
 
 export const CampCard = ({ 
@@ -21,6 +21,14 @@ export const CampCard = ({
   handleOpenCampDrawer,
   addReviewAllowed
 }) => {
+  const settings = {
+    dots: true,
+    infinite: false,
+    arrows: false,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  }
 
   return (
     <>
@@ -31,12 +39,36 @@ export const CampCard = ({
             }
             title={<Typography variant="h6">{ camp?.userName }</Typography>}
           />
-          <CardMedia
-            component="img"
-            height="194"
-            image="https://source.unsplash.com/xr-y6Ruw7K8"
-            alt="Paella dish"
-          />
+            <Slider {...settings} className='camping-list-carousel'>
+              {
+                  camp?.photos?.length ? camp?.photos?.map(photo => (
+                    <div key={photo?.id} style={{width: '100%', height: '400px'}}>
+                      <div
+                        style={{
+                          backgroundImage: `url(data:image/jpeg;base64,${photo?.image})`,
+                          width: '100%',
+                          height: '250px',
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center'
+                        }} 
+                      />
+                    </div>
+
+                  )) :
+                  <div style={{width: '100%', height: '400px'}}>
+                    <div
+                      style={{
+                        backgroundImage: 'url(https://source.unsplash.com/xr-y6Ruw7K8)',
+                        width: '100%',
+                        height: '250px',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center'
+                      }} 
+                    />
+                  </div>
+              }
+          </Slider>
+            
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
               { camp?.name }

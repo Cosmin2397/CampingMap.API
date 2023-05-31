@@ -1,14 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PermMediaOutlinedIcon from '@mui/icons-material/PermMediaOutlined';
 import Button from '@mui/material/Button';
 import { Delete as DeleteIcon, } from "@mui/icons-material"
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
+import axios from 'axios';
+import Divider from '@mui/material/Divider'
+import { useDeleteQuery } from '../hooks/useDeleteQuery'
+import { useGetQuery } from '../hooks/useGetQuery'
+import { Message } from './common/Message'
 
 import '../style/ImageUploader.scss'
 
-export const ImageUploader = () => {
+export const ImageUploader = ({ campingId, campingImages }) => {
   const [selectedImages, setSelectedImages] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
+  const [updatedImagesList, setUpdatedImagesList] = useState(null);
+  const [uploadResponse, setUploadResponse] = useState(null)
+
+  const  {deleteRequest: deleteImage, response: responseDeleteImage, error: errorDeleteImage } = useDeleteQuery(
+    'Photos/'
+  )
+
+  const  {getRequest: getImages, response:  updateImages} = useGetQuery(
+    `Photos/camping-photos/${campingId}`
+  )
+
+  useEffect(() => {
+    if(updateImages?.data?.length) {
+      setUpdatedImagesList(updateImages?.data)
+    } else {
+      setUpdatedImagesList(campingImages)
+    }
+  }, [updateImages, campingImages])
+
+  useEffect(() => {
+    if(responseDeleteImage?.status === 200) {
+      getImages()
+    }
+  }, [responseDeleteImage])
 
   const handleImageChange = (event) => {
     const files = event.target.files;
@@ -45,22 +74,34 @@ export const ImageUploader = () => {
     setSelectedImages(newImages);
   };
 
+  const imageRequest = (image) => {
+    const formData = new FormData();
+    formData.append('imageFile', image);
+
+    if(campingId) {
+      axios.post(`${process.env.REACT_APP_API_URL}Photos/${campingId}`, formData)
+      .then((response) => {
+        if(response?.status === 200) {
+          setUploadResponse('success')
+          setSelectedImages([])
+          getImages()
+        } else {
+          setUploadResponse('error')
+        }
+      })
+    }
+  }
   const handleUpload = () => {
-    // const formData = new FormData();
-    // selectedImages.forEach((image, index) => {
-    //   formData.append(`image${index}`, image);
-    // });
-    // fetch('/upload', {
-    //   method: 'POST',
-    //   body: formData,
-    // })
-    //   .then(response => {
-    //     // Handle the response
-    //   })
-    //   .catch(error => {
-    //     // Handle the error
-    //   });
-  };
+    selectedImages.forEach(photo => {
+      imageRequest(photo);
+    });
+  }
+
+  const handleDeleteImage = (imageId) => {
+    deleteImage(imageId)
+  }
+
+  
 
   return (
     <div className='images-uploader'>
@@ -82,6 +123,7 @@ export const ImageUploader = () => {
         <span>Upload</span>
       </Button>
       </div>
+
       <div className='images-preview'>
         {selectedImages.map((image, index) => (
           <div key={index}>
@@ -91,6 +133,48 @@ export const ImageUploader = () => {
         ))}
       </div>
       {errorMessage && <p className='error-message'>{errorMessage}</p>}
+
+     { updatedImagesList?.length ?  
+      (
+        <>
+          <Divider textAlign="left" sx={{ mt: 2 }}>Existing images</Divider>
+          <div className="images-preview">
+          {updatedImagesList?.map(image => (
+              <div key={image?.id}>
+                <img src={`data:image/jpeg;base64,${image?.image}`} alt={image?.name}/>
+                <DeleteIcon className='delete-icon' onClick={() => handleDeleteImage(image?.id)} />
+              </div>
+            ))}
+          </div>
+          </>
+        ) : ''
+      }
+      { responseDeleteImage?.status === 200 ? 
+          <Message 
+            showMessage={responseDeleteImage} 
+            type="success" 
+            message={`Image was successfully deleted!`}
+          />
+          :
+          <Message 
+              showMessage={errorDeleteImage} 
+              type="error" 
+              message="Image could not be deleted!"
+          />
+        }
+        { uploadResponse === 'success' ? 
+          <Message 
+            showMessage={uploadResponse === 'success'} 
+            type="success" 
+            message={`Image was successfully uploaded!`}
+          />
+          :
+          <Message 
+              showMessage={uploadResponse === 'error'} 
+              type="error" 
+              message="Image could not be uploaded!"
+          />
+        }
     </div>
   );
 };
