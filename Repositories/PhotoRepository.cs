@@ -58,6 +58,10 @@ namespace CampingMap.API.Repositories
         public async Task<List<Photo>> GetCampingPhotos(Guid id)
         {
             var photos = await _context.Photos.Where(photo => photo.CampingId == id).ToListAsync();
+            if(photos == null)
+            {
+                photos = new List<Photo>();
+            }
             return photos;
         }
     }
