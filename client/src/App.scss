@@ -21,4 +21,10 @@ body {
     width: 20px;
     height: 20px;
   }
-  
+
+  // Camps list carousel height fix
+  .camping-list-carousel {
+    .slick-slide {
+        max-height: 240px;
+    }
+}

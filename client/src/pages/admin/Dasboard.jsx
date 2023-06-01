@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { CustomTable } from "../../components/common/CustomTable"
 import { useGetQuery } from '../../hooks/useGetQuery'
-import { usePostQuery } from '../../hooks/usePostQuery'
 import { usePutQuery } from '../../hooks/usePutQuery'
 import { Message } from '../../components/common/Message'
 import { useDeleteQuery } from '../../hooks/useDeleteQuery'
@@ -22,8 +21,6 @@ export const Dasboard = ({ user }) => {
   const [formData, setFormData] = useState({});
   const [selectedRow, setSelectedRow] = useState(null);
   const [openingHours, setOpeningHours] = useState({ start: null, end: null }
-  // start: drawerOpen === 'edit' ? formData.openingHours.split(',')[0] : '2023-04-01T08:30', 
-  // end: drawerOpen === 'edit' ? formData.openingHours.split(',')[1] : '2023-04-01T17:30'
 );
 const [location, setLocation] = useState(selectedRow?.location);
 const [campingFacilities, setCampingFacilities] = useState();
@@ -59,8 +56,7 @@ useEffect(() => {
   )
 
   const  {deleteRequest, response: responseDelete, error: errorDelete } = useDeleteQuery(
-    `Campings/${selectedRow?.id}`, 
-    updatedCampingData
+    `Campings/${selectedRow?.id}`
   )
 
   useEffect(() => {

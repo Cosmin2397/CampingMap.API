@@ -9,11 +9,11 @@ export const useDeleteQuery = (endpoint_path) => {
     const [loading,setLoading] = useState(false)
 
 
-    const deleteRequest = async () => {
+    const deleteRequest = async (itemId) => {
         try{
             setLoading(true)
             const response = await axios.delete(
-                process.env.REACT_APP_API_URL + endpoint_path, 
+                `${process.env.REACT_APP_API_URL}${endpoint_path}${itemId ? itemId : ''}`, 
                 { withCredentials: true }
             )
             setResponse(response)

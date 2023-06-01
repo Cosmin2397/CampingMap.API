@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -16,26 +16,42 @@ import { usePostQuery } from '../hooks/usePostQuery'
 import { usePutQuery } from '../hooks/usePutQuery'
 import { Message } from './common/Message'
 import { ImageUploader } from './ImageUploader';
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { FormSkeleton } from './global/skeleton/FormSkeleton';
 
-const steps = ['General info', 'Location', 'Facilities'];
+const steps = ['General info', 'Location', 'Facilities & images'];
 
 export function ManageCampingForm({ data, type, loadingCamping }) {
-  const [activeStep, setActiveStep] = useState(0)
   const [formData, setFormData] = useState(data)
-
-  const schedule = data?.openingHours?.split('-')
+ 
 
   const [openingHours, setOpeningHours] = useState({ 
-    start: schedule && dayjs(schedule?.[0]), 
-    end: schedule && dayjs(schedule?.[1]),
+    start: null, 
+    end: null,
   })
   const [location, setLocation] = useState(data?.location)
   const [campingFacilities, setCampingFacilities] = useState(data?.facilities)
 
+  useEffect(() => {
+    setCampingFacilities(data?.facilities)
+  }, [data?.facilities])
+
+  useEffect(() => {
+    setFormData(data)
+  }, [data])
+
+  //Search query params function
+  const useQuery = () => {
+    const { search } = useLocation();
+  
+    return useMemo(() => new URLSearchParams(search), [search]);
+  }
   const navigate = useNavigate()
   const { id } = useParams()
+  const query = useQuery()
+  const selectedStep = query.get("selectedStep")
+
+  const [activeStep, setActiveStep] = useState(Number(selectedStep) || 0)
 
   const updatedCampingData = {
     ...formData,
@@ -148,22 +164,21 @@ export function ManageCampingForm({ data, type, loadingCamping }) {
             key="name"
             label="Name"
             name="name"
-            defaultValue={formData?.name}
-            value={formData?.name}
+            value={formData?.name ?? data?.name}
             onChange={handleFormChange}
           />
           <TextField
             key="description"
             label="Description"
             name="description"
-            value={formData?.description}
+            value={formData?.description ?? data?.description}
             onChange={handleFormChange}
           />
           <TextField
             key="phoneNumber"
             label="Phone"
             name="phoneNumber"
-            value={formData?.phoneNumber}
+            value={formData?.phoneNumber ?? data?.phoneNumber}
             onChange={handleFormChange}
           />
           <TextField
@@ -180,14 +195,14 @@ export function ManageCampingForm({ data, type, loadingCamping }) {
             <MobileTimePicker 
                 label="Opening hour start"
                 name="start"
-                defaultValue={openingHours?.start}
+                defaultValue={dayjs(formData?.openingHours?.split('-')[0] ?? data?.openingHours?.split('-')[0])}
                 closeOnSelect={false}
                 onAccept={handleStartHour}
             />   
             <MobileTimePicker 
               label="Opening hour end"
               name="end"
-              defaultValue={openingHours?.end}
+              defaultValue={dayjs(formData?.openingHours?.split('-')[1] ?? data?.openingHours?.split('-')[1])}
               closeOnSelect={false}
               onAccept={handleEndHour}
             />
@@ -213,7 +228,12 @@ export function ManageCampingForm({ data, type, loadingCamping }) {
           />
         </Grid>
         <Grid item md={6} xs={12}>
-          <ImageUploader />
+          { type === 'edit' ? 
+            <ImageUploader 
+              campingId={id ?? responseAdd?.id} 
+              campingImages={data?.photos} 
+            /> : '' 
+          }
         </Grid>
       </Grid>
     )
