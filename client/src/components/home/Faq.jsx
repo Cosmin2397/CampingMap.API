@@ -1,3 +1,4 @@
+﻿/// <reference path="../facilitiesselect.jsx" />
 import * as React from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -9,23 +10,23 @@ import Container from '@mui/material/Container';
 const QUESTIONS = [
     {
         id: 1,
-        title: 'I am an accordion',
-        content: ' Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat. Aliquam eget maximus est, id dignissim quam.'
+        title: '1. What are some popular camping destinations in Romania?',
+        content: ' Romania offers a plethora of beautiful camping destinations, including the stunning Carpathian Mountains, the scenic Danube Delta, the picturesque Transylvania region, the breathtaking Black Sea coast, and the charming Maramureș County.'
     },
     {
         id: 2,
-        title: 'I am an accordion',
-        content: ' Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat. Aliquam eget maximus est, id dignissim quam.'
+        title: '2. What amenities can I expect at Romanian campgrounds?',
+        content: ' Most campgrounds in Romania provide basic amenities such as designated camping pitches, access to clean restrooms and showers, picnic areas, and some may also offer facilities like electricity hookups, laundry services, Wi-Fi, and on-site shops.'
     },
     {
         id: 3,
-        title: 'I am an accordion',
-        content: ' Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat. Aliquam eget maximus est, id dignissim quam.'
+        title: '3. Are campfires allowed at Romanian campsites?',
+        content: ' Campfire regulations may vary between campgrounds. While some campsites permit campfires in designated fire pits, others may have restrictions due to safety or environmental concerns. It\'s advisable to check with the specific campground before planning a campfire.'
     },
     {
         id: 4,
-        title: 'I am an accordion',
-        content: ' Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat. Aliquam eget maximus est, id dignissim quam.'
+        title: '4. Are there any restrictions on bringing pets to Romanian campgrounds?',
+        content: ' Many campgrounds in Romania are pet-friendly, but it\'s essential to inquire about their specific pet policies, including any size or breed restrictions.Additionally, some protected natural areas may have limitations on pets to preserve the local ecosystem.'
     }
 ]
 

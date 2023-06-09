@@ -9,39 +9,39 @@ const TESTIMONIALS = [
         image: '',
         name: 'Mircea Balan',
         rating: 5,
-        review: 'Best app for finding a camping location'
+        review: 'Best camping location'
 
     },
     {
         id: 2,
         image: '',
-        name: 'Mircea Balan',
-        rating: 5,
-        review: 'Best app for finding a camping location'
+        name: 'Alex CH',
+        rating: 4,
+        review: 'Nice camping'
 
     },
     {
         id: 3,
         image: '',
-        name: 'Mircea Balan',
+        name: 'Agatha Willich',
         rating: 5,
-        review: 'Best app for finding a camping location'
+        review: 'Majestic vistas that leave you in awe.'
 
     },
     {
         id: 3,
         image: '',
-        name: 'Mircea Balan',
+        name: 'Mark Adwers',
         rating: 5,
-        review: 'Best app for finding a camping location'
+        review: 'The perfect blend of luxury and nature\'s charm.'
 
     },
     {
         id: 3,
         image: '',
-        name: 'Mircea Balan',
-        rating: 5,
-        review: 'Best app for finding a camping location'
+        name: 'Miruna Popa',
+        rating: 1,
+        review: 'Worst camping.'
 
     }
 ]
