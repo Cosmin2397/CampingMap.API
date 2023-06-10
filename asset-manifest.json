@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/CampingMap.API/static/css/main.c74e4e3e.css",
-    "main.js": "/CampingMap.API/static/js/main.7f3971c2.js",
+    "main.js": "/CampingMap.API/static/js/main.e735af51.js",
     "static/js/483.b2568466.chunk.js": "/CampingMap.API/static/js/483.b2568466.chunk.js",
     "static/js/787.c4e7f8f9.chunk.js": "/CampingMap.API/static/js/787.c4e7f8f9.chunk.js",
     "static/media/slick.svg": "/CampingMap.API/static/media/slick.2630a3e3eab21c607e21.svg",
@@ -10,12 +10,12 @@
     "static/media/slick.woff": "/CampingMap.API/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/CampingMap.API/index.html",
     "main.c74e4e3e.css.map": "/CampingMap.API/static/css/main.c74e4e3e.css.map",
-    "main.7f3971c2.js.map": "/CampingMap.API/static/js/main.7f3971c2.js.map",
+    "main.e735af51.js.map": "/CampingMap.API/static/js/main.e735af51.js.map",
     "483.b2568466.chunk.js.map": "/CampingMap.API/static/js/483.b2568466.chunk.js.map",
     "787.c4e7f8f9.chunk.js.map": "/CampingMap.API/static/js/787.c4e7f8f9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.c74e4e3e.css",
-    "static/js/main.7f3971c2.js"
+    "static/js/main.e735af51.js"
   ]
 }
