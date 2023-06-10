@@ -21,7 +21,7 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             {/* Front pages route */}
-            <Route path="/" element={<MainLayout />}>
+            <Route path="/CampingMap.API/" element={<MainLayout />}>
                 <Route index element={<Home />} />
                 <Route path="campings" element={<CampsMapView />} />
 
