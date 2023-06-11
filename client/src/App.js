@@ -21,7 +21,7 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             {/* Front pages route */}
-            <Route path="/CampingMap.API/" element={<MainLayout />}>
+            <Route path="/" element={<MainLayout />}>
                 <Route index element={<Home />} />
                 <Route path="campings" element={<CampsMapView />} />
 
@@ -29,10 +29,10 @@ const App = () => {
             </Route>
 
             {/* Pages without layout */}
-            <Route path="CampingMap.API/sign-in" element={<UserAccessView />}/>
+            <Route path="sign-in" element={<UserAccessView />}/>
             
             {/* Admin pages route */}
-            <Route path="CampingMap.API/dashboard" element={<AdminLayout />}>
+            <Route path="dashboard" element={<AdminLayout />}>
               <Route index element={<Dasboard />} />
               <Route path="add-camping" element={<AddCamping />} />
               <Route path="edit-camping/:id" element={<EditCamping />} />

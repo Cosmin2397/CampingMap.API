@@ -121,7 +121,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors(policy =>
-    policy.WithOrigins("https://cosmin2397.github.io/CampingMap.API", "https://cosmin2397.github.io/CampingMap.API")
+    policy.WithOrigins("https://campingmap.azurewebsites.net", "http://campingmap.azurewebsites.net")
     .AllowAnyMethod()
     .AllowAnyHeader()
     .AllowCredentials()
