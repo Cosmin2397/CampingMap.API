@@ -29,8 +29,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "predeploy" : "npm run build",
-    "deploy" : "gh-pages -d build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -42,7 +42,7 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
+      ">0.2%, not dead, not ie 11, not chrome < 51, not safari < 10",
       "not dead",
       "not op_mini all"
     ],
@@ -53,6 +53,7 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^5.0.0"
+    "gh-pages": "^5.0.0",
+    "worker-loader": "^3.0.8"
   }
 }
