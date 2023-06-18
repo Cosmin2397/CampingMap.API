@@ -30,11 +30,6 @@ namespace CampingMap.API.Controllers
         {
             var campingPhotos = await _photoRepository.GetCampingPhotos(id);
 
-            if (campingPhotos == null || !campingPhotos.Any())
-            {
-                return NotFound();
-            }
-
             return campingPhotos;
         }
 
