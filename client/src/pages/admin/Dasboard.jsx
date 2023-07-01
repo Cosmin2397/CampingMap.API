@@ -50,11 +50,6 @@ useEffect(() => {
 
   const { getRequest, data, error } = useGetQuery('Campings/userCampings')
 
-  const  {putRequest, response, loading: loadingAdd, error: errorAdd } = usePutQuery(
-    `Campings/${selectedRow?.id}`, 
-    updatedCampingData
-  )
-
   const  {deleteRequest, response: responseDelete, error: errorDelete } = useDeleteQuery(
     `Campings/${selectedRow?.id}`
   )
@@ -94,17 +89,10 @@ useEffect(() => {
         <CustomTable 
           columns={columns} 
           data={data} 
-          formData={formData} 
           setFormData={setFormData}
           selectedRow={selectedRow}
           setSelectedRow={setSelectedRow}
-          onEdit={putRequest}
           openingHours={openingHours}
-          setOpeningHours={setOpeningHours}
-          location={location}
-          setLocation={setLocation}
-          campingFacilities={campingFacilities}
-          setCampingFacilities={setCampingFacilities}
           onDelete={onDelete}
         />
     </div>

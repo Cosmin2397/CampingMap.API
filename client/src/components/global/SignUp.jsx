@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
 import { usePostQuery } from '../../hooks/usePostQuery'
 import { Message } from '../common/Message'
 import { useNavigate } from 'react-router-dom'
@@ -13,10 +11,17 @@ export const SignUp = () => {
     const [userData, setUserData] = useState({})
 
     const navigate = useNavigate()
-    const  {postRequest, response: responseAdd,  error: errorAdd } = usePostQuery(
+    const  {postRequest, response: responseAdd, loading: loadingAdd, error: errorAdd } = usePostQuery(
         `Auth/signUp`, 
         userData
     )
+
+    if(responseAdd?.data?.isAuthenticated && !loadingAdd) {
+        navigate(0)
+        setTimeout(() => {
+            navigate('/dashboard')
+        }, 3000)
+    }
 
     const RequestMessage = () => {
         return (
@@ -47,13 +52,6 @@ export const SignUp = () => {
     const handleSubmit = (event) => {
         event.preventDefault()
         postRequest(true)
-        if(responseAdd) {
-            navigate(0)
-            setTimeout(() => {
-                navigate('/dashboard')
-            }, 3000)
-        }
-
     };
   return (
     <Box

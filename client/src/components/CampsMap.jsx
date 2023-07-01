@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import Map, { Marker, Popup, FullscreenControl, GeolocateControl, NavigationControl, ScaleControl } from 'react-map-gl'
+import mapboxgl from 'mapbox-gl'
 import MapPin from "./MapPin"
 import { MapSearch } from './MapSearch'
 import { Message } from './common/Message'
@@ -13,6 +14,11 @@ import LocationOnIcon from '@mui/icons-material/LocationOn'
 
 import 'mapbox-gl/dist/mapbox-gl.css'
 import '../style/CampsMap.scss'
+
+
+//Solution for react-map-gl issue on deployed version: https://github.com/visgl/react-map-gl/issues/1266
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
 
 
 export const CampsMap = ({ 
@@ -37,8 +43,8 @@ export const CampsMap = ({
       camps?.map(camping => (
         <Marker
           key={camping.id}
-          latitude={camping.location.latitude}
-          longitude={camping.location.longitude}
+          latitude={camping?.location?.latitude}
+          longitude={camping?.location?.longitude}
           onClick={e => {
             e.originalEvent.stopPropagation();
             setSelectedCamp(camping);

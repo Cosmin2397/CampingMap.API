@@ -55,7 +55,7 @@ export function ManageCampingForm({ data, type, loadingCamping }) {
 
   const updatedCampingData = {
     ...formData,
-    openingHours: `${openingHours?.start}-${openingHours?.end}`,
+    openingHours: `${ openingHours?.start ? dayjs(openingHours?.start) : data?.openingHours?.split('-')[0]}-${openingHours?.end ? dayjs(openingHours?.end) :  data?.openingHours?.split('-')[1]}`,
     location,
     facilities: String(campingFacilities)
 
